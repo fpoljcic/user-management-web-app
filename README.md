@@ -46,10 +46,10 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 
 This is currently a closed project and it's being developed by the following group of students:
 
-<a href="https://github.com/adnaspahic" target="_blank"><img style="border-radius: 50%; height: 70px; " src="https://github.com/adnaspahic.png"></a>
-<a href="https://github.com/ahrustic" target="_blank"><img style="border-radius: 50%; height: 70px; " src="https://github.com/ahrustic.png"></a>
-<a href="https://github.com/anocajevic1" target="_blank"><img style="border-radius: 50%; height: 70px; " src="https://github.com/anocajevic1.png"></a>
-<a href="https://github.com/fpoljcic" target="_blank"><img style="border-radius: 50%; height: 70px; " src="https://github.com/fpoljcic.png"></a>
-<a href="https://github.com/lkafedzic1" target="_blank"><img style="border-radius: 50%; height: 70px; " src="https://github.com/lkafedzic1.png"></a>
-<a href="https://github.com/mpaldum1" target="_blank"><img style="border-radius: 50%; height: 70px; " src="https://github.com/mpaldum1.png"></a>
-<a href="https://github.com/nadjasokolovic" target="_blank"><img style="border-radius: 50%; height: 70px; " src="https://github.com/nadjasokolovic.png"></a>
+<a href="https://github.com/adnaspahic" target="_blank"><img width="100px" height="100px" src="https://github.com/adnaspahic.png"></a>
+<a href="https://github.com/ahrustic" target="_blank"><img width="100px" height="100px" src="https://github.com/ahrustic.png"></a>
+<a href="https://github.com/anocajevic1" target="_blank"><img width="100px" height="100px" src="https://github.com/anocajevic1.png"></a>
+<a href="https://github.com/fpoljcic" target="_blank"><img width="100px" height="100px" src="https://github.com/fpoljcic.png"></a>
+<a href="https://github.com/lkafedzic1" target="_blank"><img width="100px" height="100px" src="https://github.com/lkafedzic1.png"></a>
+<a href="https://github.com/mpaldum1" target="_blank"><img width="100px" height="100px" src="https://github.com/mpaldum1.png"></a>
+<a href="https://github.com/nadjasokolovic" target="_blank"><img width="100px" height="100px" src="https://github.com/nadjasokolovic.png"></a>
