@@ -11,10 +11,12 @@ function App() {
   return (
     <Router>
       <div className="content">
-        <Switch>
-          <PublicRoute exact path="/" component={Login} />
-          <PrivateRoute path="/dashboard/home" component={Dashboard} />
-        </Switch>
+      <Switch>
+            <PublicRoute exact path="/" component={Login} />
+            <PrivateRoute path="/dashboard/home" page="1" component={Dashboard} />
+            <PrivateRoute path="/dashboard/show_employees" page="2" component={Dashboard} />
+            <PrivateRoute path="/dashboard/add_employee" page="3" component={Dashboard} />
+          </Switch>
       </div>
     </Router>
   );
