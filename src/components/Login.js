@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Typography, Alert } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { Typography } from 'antd';
 import axios from 'axios';
 
 import { setUserSession } from '../utilities/Common';
@@ -9,23 +8,22 @@ import { setUserSession } from '../utilities/Common';
 const { Title } = Typography;
 
 const Login = (props) => {
-    const [, setLoading] = useState(false);
-    const [, setError] = useState(null);
+    const [showWarning, setShowWarning] = useState(false);
+    const [error, setError] = useState(String);
+
+    const hideWarning = () => {
+        setShowWarning(false);
+    }
 
     const onFinish = values => {
-        setError(null);
-        setLoading(true);
-
         // Saljemo zahtjev serveru, dobijamo token nazad
         axios.post('https://main-server-si.herokuapp.com/api/auth/login', {
             username: values.username,
             password: values.password,
             role: "ROLE_MANAGER"
         }).then((response) => {
-            setLoading(false);
             if (response.data.length === 0) {
-                setError("Something went wrong. Please try again later.");
-                alert("Pogresni podaci");
+                setShowWarning(true);
                 return;
             }
             // Rucno kreiramo usera, jer ne dobijemo nikakvu informaciju o user-u od servera osim tokena
@@ -36,9 +34,15 @@ const Login = (props) => {
             setUserSession(response.token, user);
             props.history.push('/dashboard/home');
         }).catch(error => {
-            setLoading(false);
-            if (error.response.status === 401) setError(error.response.data.message);
-            else setError("Something went wrong. Please try again later.");
+            if (error.response == null) {
+                setError("Please check your internet connection!");
+                return;
+            }
+            if (error.response.status === 401)
+                setError("Wrong Username or Password!");
+            else
+                setError(error.response.data.message);
+            setShowWarning(true);
         });
     };
 
@@ -67,7 +71,7 @@ const Login = (props) => {
                         },
                     ]}
                 >
-                    <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+                    <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" onChange={hideWarning} />
                 </Form.Item>
                 <Form.Item
                     name="password"
@@ -82,8 +86,18 @@ const Login = (props) => {
                         prefix={<LockOutlined className="site-form-item-icon" />}
                         type="password"
                         placeholder="Password"
+                        onChange={hideWarning}
                     />
                 </Form.Item>
+                {showWarning ?
+                    <Alert
+                        message="Error"
+                        description={error}
+                        type="error"
+                        style={{ marginBottom: '20px' }}
+                        showIcon
+                    /> : null
+                }
                 <Form.Item>
                     <Button style={{ width: '100%' }} type="primary" htmlType="submit" className="login-form-button">
                         Log in

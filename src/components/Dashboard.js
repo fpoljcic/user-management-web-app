@@ -14,7 +14,6 @@ import MyFooter from './MyFooter';
 const { Content } = Layout;
 
 function Dashboard(props) {
-  
   return (
     <Router>
       <Layout className="layout">
