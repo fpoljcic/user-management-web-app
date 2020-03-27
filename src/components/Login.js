@@ -46,7 +46,7 @@ const Login = (props) => {
                         },
                     ]}
                 >
-                    <Input
+                    <Input.Password
                         prefix={<LockOutlined className="site-form-item-icon" />}
                         type="password"
                         placeholder="Password"
@@ -55,7 +55,7 @@ const Login = (props) => {
                 <Form.Item>
                     <Button style={{ width: '100%' }} type="primary" htmlType="submit" className="login-form-button">
                         Log in
-        </Button>
+                    </Button>
                 </Form.Item>
             </Form>
         </div>
