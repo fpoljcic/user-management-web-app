@@ -1,13 +1,15 @@
 import React from 'react';
 import { Layout, Menu } from 'antd';
 import { Link } from "react-router-dom";
+import { removeUserSession } from '../utilities/Common';
 
 const { Header } = Layout;
 
 function MyHeader(props) {
     // odjava korisnika
     const handleLogout = () => {
-        // ....
+        removeUserSession();
+        props.history.push('/');
     }
 
     return (
@@ -29,10 +31,10 @@ function MyHeader(props) {
                 <Menu.Item key="3">
                     Add employees
                     <Link to="/dashboard/add_employee" />
-                </Menu.Item>
-                <Menu.Item key="4" style={{ float: "right" }} onClick={handleLogout}>
-                    Log out
-                </Menu.Item>
+                </Menu.Item> 
+                <a href="#" class="btn btn-info btn-lg" style={{ float: "right" }} onClick={handleLogout}>
+                   Log out
+                </a>                              
             </Menu>
         </Header>
     );
