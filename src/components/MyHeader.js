@@ -32,9 +32,9 @@ function MyHeader(props) {
                     Add employees
                     <Link to="/dashboard/add_employee" />
                 </Menu.Item> 
-                <a href="#" class="btn btn-info btn-lg" style={{ float: "right" }} onClick={handleLogout}>
-                   Log out
-                </a>                              
+                <Menu.Item key="4" style={{ float: "right" }} onClick={handleLogout}>
+                    Log out
+                </Menu.Item>                              
             </Menu>
         </Header>
     );
