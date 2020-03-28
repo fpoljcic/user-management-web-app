@@ -5,6 +5,12 @@ This repository is used for development of a web app for a group student project
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Deployment
+
+This application is currently deployed at https://user-management-web-app.herokuapp.com/
+
+It was deployed using [Heroku](https://www.heroku.com/), a cloud platform that offers services to host and deploy web applications. 
+
 ## Available Scripts
 
 In the project directory, you can run:
