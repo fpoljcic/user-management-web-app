@@ -2,6 +2,7 @@ import React from 'react';
 import { Layout, Menu } from 'antd';
 import { Link } from "react-router-dom";
 import { removeUserSession } from '../utilities/Common';
+import Img from 'react-image'
 
 const { Header } = Layout;
 
@@ -32,9 +33,10 @@ function MyHeader(props) {
                     Add employees
                     <Link to="/dashboard/add_employee" />
                 </Menu.Item> 
-                <Menu.Item key="4" style={{ float: "right" }} onClick={handleLogout}>
-                    Log out
-                </Menu.Item>                              
+                <Menu.Item key="4" style={{ float: "right", backgroundColor: "#039dfc" }} onClick={handleLogout}>
+                <Img src={require('../img/logout.png')} width='20px' height='20px' paddingRight='100px'/>
+                       {" "}Log out
+                </Menu.Item>                             
             </Menu>
         </Header>
     );
