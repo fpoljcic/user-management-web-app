@@ -150,6 +150,14 @@ class TableEmployee extends React.Component {
           2 >= 1 ? (
             <Link to={`/dashboard/cash_register/${record.userId}`}> Overlook</Link>
           ) : null,
+      },
+      {
+        title: 'Delete',
+        dataIndex: 'delete',
+        render: (text, record) =>
+          2 >= 1 ? (
+            <Link > Delete</Link>
+          ) : null,
       }
     ];
     return (

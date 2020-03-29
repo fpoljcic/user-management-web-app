@@ -16,6 +16,7 @@ function App() {
             <PrivateRoute path="/dashboard/home" page="1" component={Dashboard} />
             <PrivateRoute path="/dashboard/add_employee" page="3" component={Dashboard} />
             <PrivateRoute path="/dashboard/update_employee/:id" component={Dashboard} />
+            <PrivateRoute path="/dashboard/cash_register/:id" component={Dashboard} />
           </Switch>
       </div>
     </Router>
