@@ -57,7 +57,40 @@ class UpdateEmployee extends Component {
         this.handleChange = this.handleChange.bind(this);
     }
  
-  
+    componentWillMount(){
+        this.getEmployeeDetails();
+      }
+
+      getEmployeeDetails(){
+        let employee = this.props.match.params.id;
+        axios.get(`https://main-server-si.herokuapp.com/api/users/${employee}`, { headers: { Authorization: 'Bearer '+getToken()}})
+        .then(response => {
+          this.setState({
+            name: response.data.name,
+            surname: response.data.surname, 
+            address: response.data.address,
+            city: response.data.city,
+            country: response.data.country,
+            phoneNumber: response.data.phoneNumber,
+          }, (res) => {
+            console.log(this.state);
+          });
+        })
+        .catch(err => console.log(err));
+        }
+    
+        editEmployee(newMeetup){
+            let employee = this.props.match.params.id;
+            axios.request({
+              method:'put',
+              url:`https://main-server-si.herokuapp.com/api/users/${employee}`,
+              headers: { Authorization: 'Bearer '+getToken()},
+              data: newMeetup
+            }).then(response => {
+              this.props.history.push('/dashboard/home');
+            }).catch(err => console.log(err));
+          }
+
 
     handleChange = (event) => {
  
@@ -114,7 +147,7 @@ class UpdateEmployee extends Component {
     handleSubmit = (event) => {
         event.preventDefault();
         if (validateForm(this.state.errors)) {
-           
+            this.editEmployee(this.state)
         } else {
             invalid()
         }
