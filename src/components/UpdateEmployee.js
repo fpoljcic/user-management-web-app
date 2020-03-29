@@ -20,6 +20,19 @@ function invalid() {
 }
 
 
+function info() {
+    Modal.info({
+        title: 'Successful update!',
+        content: (
+            <div>
+                <p></p>
+            </div>
+        ),
+        onOk() { },
+    });
+}
+
+
 const validPhoneNumber = RegExp(/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/g);
 const validateForm = (errors) => {
     let valid = true;
@@ -88,7 +101,7 @@ class UpdateEmployee extends Component {
               data: newMeetup
             }).then(response => {
               this.props.history.push('/dashboard/home');
-            }).catch(err => console.log(err));
+            }).catch(err => invalid());
           }
 
 
@@ -148,6 +161,7 @@ class UpdateEmployee extends Component {
         event.preventDefault();
         if (validateForm(this.state.errors)) {
             this.editEmployee(this.state)
+            info()
         } else {
             invalid()
         }
