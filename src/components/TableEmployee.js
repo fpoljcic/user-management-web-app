@@ -139,7 +139,8 @@ class TableEmployee extends React.Component {
         dataIndex: 'userId',
         key: 'userId',
         filteredValue: filteredInfo.userId || null,
-       
+        sorter: (a, b) => { return a.userId > b.userId},
+        sortOrder: sortedInfo.columnKey === 'userId' && sortedInfo.order,
         ellipsis: true,
         ...this.getColumnSearchProps('userId'),
       },
@@ -148,7 +149,8 @@ class TableEmployee extends React.Component {
         dataIndex: 'name',
         key: 'name',
         filteredValue: filteredInfo.name || null,
-    
+        sorter: (a, b) => { return a.name.localeCompare(b.name) },
+        sortOrder: sortedInfo.columnKey === 'name' && sortedInfo.order,
         ellipsis: true,
         ...this.getColumnSearchProps('name'),
       },
@@ -157,7 +159,8 @@ class TableEmployee extends React.Component {
         dataIndex: 'surname',
         key: 'surname',
         filteredValue: filteredInfo.surname || null,
-        
+        sorter: (a, b) => { return a.surname.localeCompare(b.surname) },
+        sortOrder: sortedInfo.columnKey === 'surname' && sortedInfo.order,
         ellipsis: true,
         ...this.getColumnSearchProps('surname'),
       },
@@ -166,7 +169,8 @@ class TableEmployee extends React.Component {
         key: 'email',
         dataIndex: 'email',
         filteredValue: filteredInfo.email || null,
-      
+        sorter: (a, b) => { return a.email.localeCompare(b.email) },
+        sortOrder: sortedInfo.columnKey === 'email' && sortedInfo.order,
         ellipsis: true,
         ...this.getColumnSearchProps('email'),
       },
@@ -175,7 +179,8 @@ class TableEmployee extends React.Component {
         key: 'address',
         dataIndex: 'address',
         filteredValue: filteredInfo.address || null,
-    
+        sorter: (a, b) => { return a.address.localeCompare(b.address) },
+        sortOrder: sortedInfo.columnKey === 'address' && sortedInfo.order,
         ellipsis: true,
         ...this.getColumnSearchProps('address'),
       },
@@ -184,7 +189,8 @@ class TableEmployee extends React.Component {
         dataIndex: 'phoneNumber',
         key: 'phoneNumber',
         filteredValue: filteredInfo.phoneNumber || null,
-      
+        sorter: (a, b) => { return a.phoneNumber.localeCompare(b.phoneNumber) },
+        sortOrder: sortedInfo.columnKey === 'phoneNumber' && sortedInfo.order,
         ellipsis: true,
         ...this.getColumnSearchProps('phoneNumber'),
       },
@@ -193,7 +199,8 @@ class TableEmployee extends React.Component {
         dataIndex: 'country',
         key: 'country',
         filteredValue: filteredInfo.country || null,
-       
+        sorter: (a, b) => { return a.country.localeCompare(b.country) },
+        sortOrder: sortedInfo.columnKey === 'country' && sortedInfo.order,
         ellipsis: true,
         ...this.getColumnSearchProps('country'),
       },
@@ -202,7 +209,8 @@ class TableEmployee extends React.Component {
         dataIndex: 'city',
         key: 'city',
         filteredValue: filteredInfo.city || null,
-       
+        sorter: (a, b) => { return a.city.localeCompare(b.city) },
+        sortOrder: sortedInfo.columnKey === 'city' && sortedInfo.order,
         ellipsis: true,
         ...this.getColumnSearchProps('city'),
       },
