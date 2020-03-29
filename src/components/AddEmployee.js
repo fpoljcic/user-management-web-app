@@ -16,6 +16,21 @@ let data = [];
 
 let first = true;
 
+function invalid() {
+    Modal.info({
+        title: 'Invalid input!',
+        content: (
+            <div>
+                <br />
+                <p>Please esnure the data you input is valid.</p>
+            </div>
+        ),
+        onOk() { },
+    });
+}
+
+
+
 const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 const validateForm = (errors) => {
 
@@ -52,11 +67,6 @@ class AddEmployee extends Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    handleCheckBox = (event) => {
-
-
-        console.log("eeeRibo");
-    }
 
     handleChange = (event) => {
 
@@ -72,14 +82,14 @@ class AddEmployee extends Component {
         switch (name) {
             case 'name':
                 errors.name =
-                    value.length < 2
-                        ? 'Names must be at least 2 characters long!'
+                    value.length < 3
+                        ? 'Names must be at least 3 characters long!'
                         : '';
                 break;
             case 'surname':
                 errors.surname =
-                    value.length < 2
-                        ? 'Surnames must be at least 2 characters long!'
+                    value.length < 3
+                        ? 'Surnames must be at least 3 characters long!'
                         : '';
                 break;
 
@@ -103,8 +113,8 @@ class AddEmployee extends Component {
                 break;
             case 'city':
                 errors.city =
-                    value.length < 3
-                        ? 'City must contain at least 3 characters!'
+                    value.length < 5
+                        ? 'City must contain at least 5 characters!'
                         : '';
                 break;
             case 'address':
@@ -138,9 +148,12 @@ class AddEmployee extends Component {
 
         if (validateForm(this.state.errors)) {
 
-            // POST zahtjev
+        // POST request
+
+        } else {
+            invalid()
+        }
     }
-}
 
     render() {
         const { errors } = this.state;
@@ -301,7 +314,6 @@ class MyCheckBox extends React.Component {
             indeterminate: false,
             checkAll: e.target.checked,
         });
-
 
     };
 
