@@ -5,6 +5,9 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { getToken } from '../utilities/Common';
 
+import Highlighter from 'react-highlight-words';
+
+
 class TableEmployee extends React.Component {
   constructor() {
     super();
@@ -13,11 +16,15 @@ class TableEmployee extends React.Component {
       filteredInfo: null,
       sortedInfo: null,
       empl: [],
+      searchText: '',
+      searchedColumn: '',
     }
   }
   componentWillMount() {
     this.getEmployees();
   }
+
+
 
   getEmployees() {
     axios.get('https://main-server-si.herokuapp.com/api/employees', { headers: { Authorization: 'Bearer ' + getToken() } })
@@ -35,6 +42,7 @@ class TableEmployee extends React.Component {
       filteredInfo: filters,
       sortedInfo: sorter,
     });
+    console.log("lol", this.state);
   };
 
   clearFilters = () => {
@@ -45,86 +53,87 @@ class TableEmployee extends React.Component {
     this.setState({
       filteredInfo: null,
       sortedInfo: null,
+      searchText: '' 
     });
   };
 
+  
 
   render() {
+    
     let sortedInfo = this.state.sortedInfo;
     let filteredInfo = this.state.filteredInfo;
     sortedInfo = sortedInfo || {};
     filteredInfo = filteredInfo || {};
     const columns = [
       {
+        title: 'ID',
+        dataIndex: 'userId',
+        key: 'userId',
+        filteredValue: filteredInfo.userId || null,
+        ellipsis: true,
+     
+      },
+      {
         title: 'Name',
         dataIndex: 'name',
         key: 'name',
         filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.name.length - b.name.length,
-        sortOrder: sortedInfo.columnKey === 'name' && sortedInfo.order,
+
         ellipsis: true,
+    
       },
       {
         title: 'Surname',
         dataIndex: 'surname',
         key: 'surname',
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.name.length - b.name.length,
-        sortOrder: sortedInfo.columnKey === 'surname' && sortedInfo.order,
+        filteredValue: filteredInfo.surname || null,
+    
         ellipsis: true,
+ 
       },
       {
         title: 'Email',
-        dataIndex: 'email',
         key: 'email',
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.name.length - b.name.length,
-        sortOrder: sortedInfo.columnKey === 'email' && sortedInfo.order,
+        dataIndex: 'email',
+        filteredValue: filteredInfo.email || null,
+
         ellipsis: true,
+       
       },
       {
         title: 'Address',
-        dataIndex: 'address',
         key: 'address',
-
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.name.length - b.name.length,
-        sortOrder: sortedInfo.columnKey === 'address' && sortedInfo.order,
+        dataIndex: 'address',
+        filteredValue: filteredInfo.address || null,
+      
         ellipsis: true,
+      
       },
       {
         title: 'Phone number',
         dataIndex: 'phoneNumber',
         key: 'phoneNumber',
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.name.length - b.name.length,
-        sortOrder: sortedInfo.columnKey === 'phoneNumber' && sortedInfo.order,
+
         ellipsis: true,
+   
       },
       {
         title: 'Country',
         dataIndex: 'country',
         key: 'country',
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.name.length - b.name.length,
-        sortOrder: sortedInfo.columnKey === 'country' && sortedInfo.order,
-        ellipsis: true,
+        filteredValue: filteredInfo.country || null,
+              ellipsis: true,
+   
       },
       {
         title: 'City',
         dataIndex: 'city',
         key: 'city',
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.name.length - b.name.length,
-        sortOrder: sortedInfo.columnKey === 'city' && sortedInfo.order,
+        filteredValue: filteredInfo.city || null,
+     
         ellipsis: true,
+
       },
       {
         title: 'Edit',
@@ -134,6 +143,14 @@ class TableEmployee extends React.Component {
             <Link to={`/dashboard/update_employee/${record.userId}`}> Edit</Link>
           ) : null,
       },
+      {
+        title: 'Cash register overlook',
+        dataIndex: 'Cash register overlook',
+        render: (text, record) =>
+          2 >= 1 ? (
+            <Link to={`/dashboard/cash_register/${record.userId}`}> Overlook</Link>
+          ) : null,
+      }
     ];
     return (
       <div>
@@ -147,3 +164,4 @@ class TableEmployee extends React.Component {
 }
 
 export default TableEmployee;
+
