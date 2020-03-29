@@ -25,10 +25,6 @@ function MyHeader(props) {
                     Home
                     <Link to="/dashboard/home" />
                 </Menu.Item>
-                <Menu.Item key="2">
-                    Show employees
-                    <Link to="/dashboard/show_employees" />
-                </Menu.Item>
                 <Menu.Item key="3">
                     Add employees
                     <Link to="/dashboard/add_employee" />
