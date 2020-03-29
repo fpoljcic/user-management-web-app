@@ -7,6 +7,18 @@ import PublicRoute from '../utilities/PublicRoute';
 import { getToken } from '../utilities/Common';
   
 
+function invalid() {
+    Modal.info({
+        title: 'Invalid update!',
+        content: (
+            <div>
+                <p></p>
+            </div>
+        ),
+        onOk() { },
+    });
+}
+
 
 const validPhoneNumber = RegExp(/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/g);
 const validateForm = (errors) => {
@@ -58,20 +70,20 @@ class UpdateEmployee extends Component {
         switch (name) {
             case 'name':
                 errors.name =
-                    value.length < 3
-                        ? 'Names must be at least 3 characters long!'
+                    value.length < 1
+                        ? 'Names must be at least 1 characters long!'
                         : '';
                 break;
             case 'surname':
                 errors.surname =
-                    value.length < 3
-                        ? 'Surnames must be at least 3 characters long!'
+                    value.length < 1
+                        ? 'Surnames must be at least 1 characters long!'
                         : '';
                 break;
             case 'country':
                 errors.country =
-                    value.length < 5
-                        ? 'Country must contain at least 5 characters!'
+                    value.length < 3
+                        ? 'Country must contain at least 3 characters!'
                         : '';
                 break;
             case 'city':
@@ -88,7 +100,7 @@ class UpdateEmployee extends Component {
                 break;
             case 'phoneNumber':
                 errors.phoneNumber =
-                    value.length < 12 &&  validPhoneNumber.test(value)
+                    value.length < 12 || validPhoneNumber.test(value)
                         ? 'Phone number is not valid!'
                         : '';
                 break;
@@ -104,7 +116,7 @@ class UpdateEmployee extends Component {
         if (validateForm(this.state.errors)) {
            
         } else {
-           
+            invalid()
         }
     }
  
