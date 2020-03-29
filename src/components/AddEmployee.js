@@ -4,8 +4,6 @@ import { Input, Col, Row, Select, InputNumber, DatePicker, AutoComplete, Cascade
 import { Button } from 'antd';
 import axios from 'axios';
 import { getToken } from '../utilities/Common';
-import { Link } from 'react-router-dom';
-
 
 const CheckboxGroup = Checkbox.Group;
 
@@ -16,6 +14,18 @@ let data = [];
 
 let first = true;
 
+function info() {
+    Modal.info({
+        title: 'Successful!',
+        content: (
+            <div>
+                <br />
+                <p>A new employee has been added successfully.</p>
+            </div>
+        ),
+        onOk() { },
+    });
+}
 
 function invalid() {
     Modal.info({
@@ -54,6 +64,15 @@ function giveRole(value) {
 
 }
 
+let boolName = true;
+let boolSurname = true;
+let boolAddress = true;
+let boolPhone= true;
+let boolUsername = true;
+let boolPassword = true;
+let boolEmail = true;
+let boolCountry= true;
+let boolCity= true;
 
 const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 const validateForm = (errors) => {
@@ -91,7 +110,7 @@ class AddEmployee extends Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    handleChange = (event) => {
+     handleChange = (event) => {
 
         event.preventDefault();
         const { name, value } = event.target;
@@ -103,58 +122,69 @@ class AddEmployee extends Component {
         switch (name) {
             case 'name':
                 errors.name =
-                    value.length < 3
+                    value.length < 2  || boolName
                         ? 'Names must be at least 3 characters long!'
                         : '';
+                boolName = false;
                 break;
             case 'surname':
                 errors.surname =
-                    value.length < 3
+                    value.length < 2 || boolSurname
                         ? 'Surnames must be at least 3 characters long!'
                         : '';
+                        boolSurname  = false;
                 break;
 
             case 'email':
                 errors.email =
-                    validEmailRegex.test(value)
+                    validEmailRegex.test(value) || boolEmail
                         ? ''
                         : 'Email is not valid!';
+
+                        boolEmail = false;
                 break;
             case 'password':
                 errors.password =
-                    value.length < 5
+                    value.length < 5 || boolPassword
                         ? 'Passwords must be at least 5 characters long!'
                         : '';
+                        boolPassword = false;
                 break;
             case 'country':
                 errors.country =
-                    value.length < 3
+                    value.length < 3 || boolCountry
                         ? 'Country must contain at least 3 characters!'
                         : '';
+                        boolCountry = false;
                 break;
             case 'city':
                 errors.city =
-                    value.length < 5
+                    value.length < 3 || boolCity
                         ? 'City must contain at least 5 characters!'
                         : '';
+                        boolCity = false;
                 break;
             case 'address':
                 errors.address =
-                    value.length < 5
+                    value.length < 5 || boolAddress
                         ? 'Address must contain at least 5 characters!'
                         : '';
+                        boolAddress= false;
                 break;
             case 'username':
                 errors.username =
-                    value.length < 5
+                    value.length < 5 || boolUsername
                         ? 'Username must contain at least 5 characters!'
                         : '';
+
+                        boolUsername = false;
                 break;
             case 'phoneNumber':
                 errors.phoneNumber =
-                    value.length < 6 || value.match(/^[0-9a-zA-Z]+$/)
+                    boolPhone || ( value.length < 6 || value.match(/^[0-9a-zA-Z]+$/) )
                         ? 'Phone number is not valid!'
                         : '';
+                        boolPhone = false;
                 break;
             default:
                 break;
@@ -190,13 +220,21 @@ class AddEmployee extends Component {
                 }
             })
                 .then((response) => {
-                    this.props.history.push('/');
-                    
-                    // success message
+                    this.props.history.push('/dashboard/home');
+                    info()
 
                 }, (error) => {
 
-                   // fail message
+                    Modal.info({
+                        title: 'Invalid input!',
+                        content: (
+                            <div>
+                                <br />
+                                <p> New employee with specified information can not be added.</p>
+                            </div>
+                        ),
+                        onOk() { },
+                    });
                 });
 
         } else {
@@ -206,7 +244,7 @@ class AddEmployee extends Component {
 
     render() {
         const { errors } = this.state;
-        const { username } = this.state.username;
+     
         return (
             <div className="site-layout-content">
 
@@ -360,10 +398,6 @@ class MyCheckBox extends React.Component {
         });
         data = list;
     };
-
-    getData() {
-        return this.data;
-    }
 
     onCheckAllChange = e => {
         this.setState({

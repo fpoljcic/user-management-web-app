@@ -32,8 +32,6 @@ function info() {
     });
 }
 
-
-const validPhoneNumber = RegExp(/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/g);
 const validateForm = (errors) => {
     let valid = true;
     Object.values(errors).forEach(
@@ -146,7 +144,7 @@ class UpdateEmployee extends Component {
                 break;
             case 'phoneNumber':
                 errors.phoneNumber =
-                    value.length < 12 || validPhoneNumber.test(value)
+                    value.length < 6 || value.match(/^[0-9a-zA-Z]+$/) 
                         ? 'Phone number is not valid!'
                         : '';
                 break;
