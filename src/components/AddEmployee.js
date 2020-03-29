@@ -16,6 +16,7 @@ let data = [];
 
 let first = true;
 
+
 function invalid() {
     Modal.info({
         title: 'Invalid input!',
@@ -29,6 +30,29 @@ function invalid() {
     });
 }
 
+function giveRole(value) {
+    switch (value) {
+
+        case 'Warehouse Manager':
+            return "ROLE_WAREMAN";
+
+        case 'Public Relations Worker':
+            return "ROLE_PRW";
+
+        case 'User Manager':
+            return "ROLE_MANAGER";
+
+        case 'Cashier':
+            return "ROLE_CASHIER";
+
+        case 'Bartender':
+            return "ROLE_BARTENDER";
+
+        default:
+            return "";
+    }
+
+}
 
 
 const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
@@ -67,10 +91,7 @@ class AddEmployee extends Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
-
     handleChange = (event) => {
-
-        console.log("lo", data);
 
         event.preventDefault();
         const { name, value } = event.target;
@@ -148,7 +169,35 @@ class AddEmployee extends Component {
 
         if (validateForm(this.state.errors)) {
 
-        // POST request
+            console.log(data);
+
+
+            axios.request({
+                method: 'post',
+                url: ' https://main-server-si.herokuapp.com/api/auth/register',
+                headers: { Authorization: 'Bearer ' + getToken() },
+                data: {
+                    username: this.state.username,
+                    email: this.state.email,
+                    name: this.state.name,
+                    surname: this.state.surname,
+                    address: this.state.address,
+                    password: this.state.password,
+                    phoneNumber: this.state.phoneNumber,
+                    country: this.state.country,
+                    city: this.state.city,
+                    roles: data
+                }
+            })
+                .then((response) => {
+                    this.props.history.push('/');
+                    
+                    // success message
+
+                }, (error) => {
+
+                   // fail message
+                });
 
         } else {
             invalid()
@@ -305,8 +354,16 @@ class MyCheckBox extends React.Component {
             checkAll: checkedList.length === plainOptions.length,
         });
 
+        let list = [];
+        checkedList.forEach((index) => {
+            list.push({ "rolename": giveRole(index) });
+        });
+        data = list;
     };
 
+    getData() {
+        return this.data;
+    }
 
     onCheckAllChange = e => {
         this.setState({
@@ -315,6 +372,13 @@ class MyCheckBox extends React.Component {
             checkAll: e.target.checked,
         });
 
+
+        let list = [];
+        let temp = e.target.checked ? plainOptions : [];
+        temp.forEach((index) => {
+            list.push({ "rolename": giveRole(index) });
+        });
+        data = list;
     };
 
     render() {
