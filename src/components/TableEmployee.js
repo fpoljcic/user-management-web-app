@@ -1,33 +1,32 @@
 import React from 'react';
 import { Table, Input, Button, Popconfirm } from 'antd';
-import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { getToken } from '../utilities/Common';
 
 class TableEmployee extends React.Component {
-  constructor(){
+  constructor() {
     super();
-     this.state = {
+    this.state = {
       employees: [],
       filteredInfo: null,
       sortedInfo: null,
       empl: [],
     }
   }
-  componentWillMount(){
+  componentWillMount() {
     this.getEmployees();
   }
 
-  getEmployees(){
-    axios.get('https://main-server-si.herokuapp.com/api/employees', { headers: { Authorization: 'Bearer '+getToken()}})
+  getEmployees() {
+    axios.get('https://main-server-si.herokuapp.com/api/employees', { headers: { Authorization: 'Bearer ' + getToken() } })
       .then(response => {
-        this.setState({employees: response.data}, () => {
+        this.setState({ employees: response.data }, () => {
           console.log(this.state.employees);
         })
-    })
-    .catch(err => console.log(err));
+      })
+      .catch(err => console.log(err));
   }
 
   handleChange = (pagination, filters, sorter) => {
@@ -80,10 +79,6 @@ class TableEmployee extends React.Component {
         title: 'Email',
         dataIndex: 'email',
         key: 'email',
-        filters: [
-          { text: 'London', value: 'London' },
-          { text: 'New York', value: 'New York' },
-        ],
         filteredValue: filteredInfo.name || null,
         onFilter: (value, record) => record.name.includes(value),
         sorter: (a, b) => a.name.length - b.name.length,
@@ -94,10 +89,7 @@ class TableEmployee extends React.Component {
         title: 'Address',
         dataIndex: 'address',
         key: 'address',
-        filters: [
-          { text: 'London', value: 'London' },
-          { text: 'New York', value: 'New York' },
-        ],
+
         filteredValue: filteredInfo.name || null,
         onFilter: (value, record) => record.name.includes(value),
         sorter: (a, b) => a.name.length - b.name.length,
@@ -108,10 +100,6 @@ class TableEmployee extends React.Component {
         title: 'Phone number',
         dataIndex: 'phoneNumber',
         key: 'phoneNumber',
-        filters: [
-          { text: 'London', value: 'London' },
-          { text: 'New York', value: 'New York' },
-        ],
         filteredValue: filteredInfo.name || null,
         onFilter: (value, record) => record.name.includes(value),
         sorter: (a, b) => a.name.length - b.name.length,
@@ -122,10 +110,6 @@ class TableEmployee extends React.Component {
         title: 'Country',
         dataIndex: 'country',
         key: 'country',
-        filters: [
-          { text: 'London', value: 'London' },
-          { text: 'New York', value: 'New York' },
-        ],
         filteredValue: filteredInfo.name || null,
         onFilter: (value, record) => record.name.includes(value),
         sorter: (a, b) => a.name.length - b.name.length,
