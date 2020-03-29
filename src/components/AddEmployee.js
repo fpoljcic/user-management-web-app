@@ -4,6 +4,7 @@ import { Input, Col, Row, Select, InputNumber, DatePicker, AutoComplete, Cascade
 import { Button } from 'antd';
 import axios from 'axios';
 import { getToken } from '../utilities/Common';
+import { Link } from 'react-router-dom';
 
 
 const CheckboxGroup = Checkbox.Group;
@@ -12,8 +13,20 @@ const plainOptions = ['User Manager', 'Warehouse Manager', 'Public Relations Wor
 const defaultCheckedList = ['User Manager'];
 
 let data = [];
+
 let first = true;
 
+const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
+const validateForm = (errors) => {
+
+    let valid = true;
+    if (first) return !first;
+
+    Object.values(errors).forEach(
+        (val) => val.length > 0 && (valid = false)
+    );
+    return valid;
+}
 
 class AddEmployee extends Component {
     constructor(props) {
@@ -42,16 +55,92 @@ class AddEmployee extends Component {
     handleCheckBox = (event) => {
 
 
-      }
+        console.log("eeeRibo");
+    }
 
     handleChange = (event) => {
 
-      
+        console.log("lo", data);
+
+        event.preventDefault();
+        const { name, value } = event.target;
+        let errors = this.state.errors;
+        first = false;
+        this.setState({
+            [name]: value
+        });
+        switch (name) {
+            case 'name':
+                errors.name =
+                    value.length < 2
+                        ? 'Names must be at least 2 characters long!'
+                        : '';
+                break;
+            case 'surname':
+                errors.surname =
+                    value.length < 2
+                        ? 'Surnames must be at least 2 characters long!'
+                        : '';
+                break;
+
+            case 'email':
+                errors.email =
+                    validEmailRegex.test(value)
+                        ? ''
+                        : 'Email is not valid!';
+                break;
+            case 'password':
+                errors.password =
+                    value.length < 5
+                        ? 'Passwords must be at least 5 characters long!'
+                        : '';
+                break;
+            case 'country':
+                errors.country =
+                    value.length < 3
+                        ? 'Country must contain at least 3 characters!'
+                        : '';
+                break;
+            case 'city':
+                errors.city =
+                    value.length < 3
+                        ? 'City must contain at least 3 characters!'
+                        : '';
+                break;
+            case 'address':
+                errors.address =
+                    value.length < 5
+                        ? 'Address must contain at least 5 characters!'
+                        : '';
+                break;
+            case 'username':
+                errors.username =
+                    value.length < 5
+                        ? 'Username must contain at least 5 characters!'
+                        : '';
+                break;
+            case 'phoneNumber':
+                errors.phoneNumber =
+                    value.length < 6 || value.match(/^[0-9a-zA-Z]+$/)
+                        ? 'Phone number is not valid!'
+                        : '';
+                break;
+            default:
+                break;
+        }
+
+        this.setState({ errors, [name]: value });
     }
 
     handleSubmit = values => {
 
-           }
+        values.preventDefault();
+
+        if (validateForm(this.state.errors)) {
+
+            // POST zahtjev
+    }
+}
 
     render() {
         const { errors } = this.state;
@@ -203,12 +292,8 @@ class MyCheckBox extends React.Component {
             checkAll: checkedList.length === plainOptions.length,
         });
 
-       
     };
 
-    getData() {
-        return this.data;
-    }
 
     onCheckAllChange = e => {
         this.setState({
@@ -218,7 +303,6 @@ class MyCheckBox extends React.Component {
         });
 
 
-       
     };
 
     render() {
