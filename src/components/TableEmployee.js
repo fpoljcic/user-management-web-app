@@ -1,6 +1,5 @@
 import React from 'react';
 import { Table, Input, Button, Popconfirm } from 'antd';
-import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
