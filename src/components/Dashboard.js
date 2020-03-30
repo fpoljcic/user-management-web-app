@@ -10,6 +10,7 @@ import UpdateEmployee from './UpdateEmployee';
 
 import MyHeader from './MyHeader';
 import MyFooter from './MyFooter';
+import CashRegister from './CashRegister';
 
 const { Content } = Layout;
 
@@ -22,6 +23,7 @@ function Dashboard(props) {
           <PrivateRoute path="/dashboard/home" component={Home} />
           <PrivateRoute path="/dashboard/add_employee" component={AddEmployee} />
           <PrivateRoute path="/dashboard/update_employee/:id" component={UpdateEmployee} />
+          <PrivateRoute path="/dashboard/cash_register/:id" component={CashRegister} />
         </Content>
         <MyFooter />
       </Layout>
