@@ -31,7 +31,7 @@ const Login = (props) => {
                 username: values.username,
                 role: "ROLE_MANAGER"
             }
-            setUserSession(response.token, user);
+            setUserSession(response.data.token, user);
             props.history.push('/dashboard/home');
         }).catch(error => {
             if (error.response == null) {
