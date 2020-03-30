@@ -7,14 +7,14 @@ const columns = [
   {
     title: 'Office ID',
     dataIndex: 'officeId',
-    sorter: {
-      compare: (a, b) => a.officeId - b.officeId,
-      multiple: 1,
-    },
   },
   {
-    title: 'Cash registers ID',
-    dataIndex: 'cashRegisters',
+    title: 'Cash register ID',
+    dataIndex: 'cashRegister',
+    sorter: {
+        compare: (a, b) => a.cashRegister - b.cashRegister,
+        multiple: 1,
+      },
   },
   {
     title: 'Manager',
@@ -71,10 +71,18 @@ export default class CashRegistersOverview extends Component {
   }
 
   render() {   
+    const data = [];
+    const length = this.state.cashRegisters.length;
 
-    const data = [
-      
-    ];
+    for(let i=0; i<length; i++) {
+        data.push({
+            officeId: this.state.officeId,
+            cashRegister: Object.values(this.state.cashRegisters[i]),
+            managerId: this.state.managerId,
+        });
+    }   
+    
+    console.log(data);
 
     return (
       <div style={{height: '75vh'}}>
