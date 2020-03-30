@@ -223,11 +223,11 @@ class TableEmployee extends React.Component {
           ) : null,
       },
       {
-        title: 'Cash register overlook',
-        dataIndex: 'Cash register overlook',
+        title: 'Cash registers overview',
+        dataIndex: 'Cash register overview',
         render: (text, record) =>
           2 >= 1 ? (
-            <Link to={`/dashboard/cash_register/${record.userId}`}> Overlook</Link>
+            <Link to={`/dashboard/cash_register/${record.userId}`}> Overview</Link>
           ) : null,
       },
       {
