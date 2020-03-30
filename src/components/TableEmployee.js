@@ -139,7 +139,7 @@ class TableEmployee extends React.Component {
         dataIndex: 'userId',
         key: 'userId',
         filteredValue: filteredInfo.userId || null,
-        sorter: (a, b) => { return a.userId > b.userId},
+        sorter: (a, b) =>  a.userId - b.userId,
         sortOrder: sortedInfo.columnKey === 'userId' && sortedInfo.order,
         ellipsis: true,
         ...this.getColumnSearchProps('userId'),
