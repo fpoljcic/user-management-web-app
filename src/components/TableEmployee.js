@@ -57,6 +57,36 @@ class TableEmployee extends React.Component {
     });
   };
 
+  handleDeleteRow(userId){
+    let i;
+    let rows = [...this.state.employees]
+    for(i=0; i<rows.length; i++)
+      if(rows[i].userId == userId) break;
+    
+    if(window.confirm('Delete the item?')){
+      this.deleteEmployee(userId, rows[i]);
+      
+      rows.splice(i,1);
+      this.setState({
+        employees: rows
+      });
+    }
+  };
+  
+  deleteEmployee(userId, employeeObject){
+    
+    axios.request({
+      method:'delete',
+      url:`https://main-server-si.herokuapp.com/api/employees/${userId}`,
+      headers: { Authorization: 'Bearer '+getToken()},
+      data: employeeObject
+    }).then(response => {
+      
+    }).catch((err) => {
+      console.log(err)
+    });
+  }
+
   getColumnSearchProps = dataIndex => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div style={{ padding: 8 }}>
@@ -233,10 +263,12 @@ class TableEmployee extends React.Component {
       {
         title: 'Delete',
         dataIndex: 'delete',
-        render: (text, record) =>
-          2 >= 1 ? (
-            <Link > Delete</Link>
-          ) : null,
+        render : (text, record) =>
+        2>=1 ? (
+          
+          <button onClick={i=>this.handleDeleteRow(record.userId)}>Delete</button>
+          
+        ) : null,
       }
     ];
     return (
