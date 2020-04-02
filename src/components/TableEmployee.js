@@ -53,35 +53,35 @@ class TableEmployee extends React.Component {
     this.setState({
       filteredInfo: null,
       sortedInfo: null,
-      searchText: '' 
+      searchText: ''
     });
   };
 
-  handleDeleteRow(userId){
+  handleDeleteRow(userId) {
     let i;
     let rows = [...this.state.employees]
-    for(i=0; i<rows.length; i++)
-      if(rows[i].userId == userId) break;
-    
-    if(window.confirm('Delete the item?')){
+    for (i = 0; i < rows.length; i++)
+      if (rows[i].userId == userId) break;
+
+    if (window.confirm('Delete the item?')) {
       this.deleteEmployee(userId, rows[i]);
-      
-      rows.splice(i,1);
+
+      rows.splice(i, 1);
       this.setState({
         employees: rows
       });
     }
   };
-  
-  deleteEmployee(userId, employeeObject){
-    
+
+  deleteEmployee(userId, employeeObject) {
+
     axios.request({
-      method:'delete',
-      url:`https://main-server-si.herokuapp.com/api/employees/${userId}`,
-      headers: { Authorization: 'Bearer '+getToken()},
+      method: 'delete',
+      url: `https://main-server-si.herokuapp.com/api/employees/${userId}`,
+      headers: { Authorization: 'Bearer ' + getToken() },
       data: employeeObject
     }).then(response => {
-      
+
     }).catch((err) => {
       console.log(err)
     });
@@ -136,13 +136,13 @@ class TableEmployee extends React.Component {
         />
       ) : (
           text
-        ),      
-   
+        ),
+
   });
 
   handleSearch = (selectedKeys, confirm, dataIndex) => {
 
-    
+
     console.log(this.state);
     confirm();
     this.setState({
@@ -158,7 +158,7 @@ class TableEmployee extends React.Component {
 
 
   render() {
-    
+
     let sortedInfo = this.state.sortedInfo;
     let filteredInfo = this.state.filteredInfo;
     sortedInfo = sortedInfo || {};
@@ -169,7 +169,7 @@ class TableEmployee extends React.Component {
         dataIndex: 'userId',
         key: 'userId',
         filteredValue: filteredInfo.userId || null,
-        sorter: (a, b) =>  a.userId - b.userId,
+        sorter: (a, b) => a.userId - b.userId,
         sortOrder: sortedInfo.columnKey === 'userId' && sortedInfo.order,
         ellipsis: true,
         ...this.getColumnSearchProps('userId'),
@@ -263,20 +263,20 @@ class TableEmployee extends React.Component {
       {
         title: 'Delete',
         dataIndex: 'delete',
-        render : (text, record) =>
-        2>=1 ? (
-          
-          <button onClick={i=>this.handleDeleteRow(record.userId)}>Delete</button>
-          
-        ) : null,
+        render: (text, record) =>
+          2 >= 1 ? (
+
+            <button onClick={i => this.handleDeleteRow(record.userId)}>Delete</button>
+
+          ) : null,
       }
     ];
     return (
       <div>
-        <div className="table-operations">
+        <Table columns={columns} dataSource={this.state.employees} onChange={this.handleChange} />
+        <div className="table-operations" style={{ marginTop: '-48px' }}>
           <Button onClick={this.clearAll}>Clear filters and sorters</Button>
         </div>
-        <Table columns={columns} dataSource={this.state.employees} onChange={this.handleChange} />
       </div>
     );
   }

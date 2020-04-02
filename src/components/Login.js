@@ -26,12 +26,16 @@ const Login = (props) => {
                 setShowWarning(true);
                 return;
             }
-            // Rucno kreiramo usera, jer ne dobijemo nikakvu informaciju o user-u od servera osim tokena
-            let user = {
-                username: values.username,
-                role: "ROLE_MANAGER"
-            }
-            setUserSession(response.data.token, user);
+            var currentdate = new Date();
+            var date = currentdate.getDate() + "."
+                + (currentdate.getMonth() + 1) + "."
+                + currentdate.getFullYear();
+            var time = currentdate.getHours() + ":"
+                + currentdate.getMinutes();
+            response.data.profile.loginDate = date;
+            response.data.profile.loginTime = time;
+            setUserSession(response.data.token, response.data.profile);
+            console.log(response.data.profile);
             props.history.push('/dashboard/home');
         }).catch(error => {
             if (error.response == null) {

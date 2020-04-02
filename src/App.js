@@ -10,15 +10,13 @@ import PublicRoute from './utilities/PublicRoute';
 function App() {
   return (
     <Router>
-      <div className="content">
       <Switch>
-            <PublicRoute exact path="/" component={Login} />
-            <PrivateRoute path="/dashboard/home" page="1" component={Dashboard} />
-            <PrivateRoute path="/dashboard/add_employee" page="3" component={Dashboard} />
-            <PrivateRoute path="/dashboard/update_employee/:id" component={Dashboard} />
-            <PrivateRoute path="/dashboard/cash_register/:id" component={Dashboard} />
-          </Switch>
-      </div>
+        <PublicRoute exact path="/" component={Login} />
+        <PrivateRoute path="/dashboard/home" page="1" component={Dashboard} />
+        <PrivateRoute path="/dashboard/add_employee" page="3" component={Dashboard} />
+        <PrivateRoute path="/dashboard/update_employee/:id" component={Dashboard} />
+        <PrivateRoute path="/dashboard/cash_register/:id" component={Dashboard} />
+      </Switch>
     </Router>
   );
 }

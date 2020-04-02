@@ -1,7 +1,19 @@
 @import '~antd/dist/antd.css';
 
-.content {
+.content, body {
   background-image: url("/background.jpg");
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+.content {
+  min-height: calc(100vh - 119px);
+}
+
+.footerStyle {
+  color: lightgray;
+  background-color: rgba(0, 21, 41, 0.84);
+  text-align: center;
+  padding-top: 0.8%;
+  padding-bottom: 0.8%;
 }
