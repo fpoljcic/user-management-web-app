@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { Table, Input, Button, Popconfirm } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
@@ -6,6 +7,8 @@ import axios from 'axios';
 import { getToken } from '../utilities/Common';
 
 import Highlighter from 'react-highlight-words';
+import Report from './Report';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 
 class TableEmployee extends React.Component {
@@ -23,8 +26,6 @@ class TableEmployee extends React.Component {
   componentWillMount() {
     this.getEmployees();
   }
-
-
 
   getEmployees() {
     axios.get('https://main-server-si.herokuapp.com/api/employees', { headers: { Authorization: 'Bearer ' + getToken() } })
@@ -55,6 +56,13 @@ class TableEmployee extends React.Component {
       sortedInfo: null,
       searchText: ''
     });
+  };
+
+  generateReport = () => {
+    //nesto uraditi da prikaze izvjestaj iz Report.js
+    return (
+    <Report/>
+    );
   };
 
   handleDeleteRow(userId) {
@@ -274,8 +282,10 @@ class TableEmployee extends React.Component {
     return (
       <div>
         <Table columns={columns} dataSource={this.state.employees} onChange={this.handleChange} />
-        <div className="table-operations" style={{ marginTop: '-48px' }}>
+        <div id = "container" className="table-operations" style={{ marginTop: '-48px' }}>
           <Button onClick={this.clearAll}>Clear filters and sorters</Button>
+          {" "}
+          <Button onClick={this.generateReport}>Generate report</Button>
         </div>
       </div>
     );

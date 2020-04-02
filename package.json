@@ -9,6 +9,8 @@
     "antd": "^4.0.4",
     "axios": "^0.19.2",
     "eslint": "^6.6.0",
+    "jspdf": "^1.5.3",
+    "jspdf-autotable": "^3.3.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-highlight-words": "^0.16.0",
