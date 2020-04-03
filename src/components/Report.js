@@ -10,9 +10,9 @@ class Report extends React.Component {
   constructor() {
     super();
     this.state = {
-      people: TableEmployee.getState().emloyees
+      people: [] //ovdje treba uzeti sav sadrzaj tabele, to je ono employees iz state-a u TableEmployee
     }
-  }
+  };
 
   exportPDF = () => {
     const unit = "pt";

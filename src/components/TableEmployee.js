@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { Table, Input, Button, Popconfirm } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
@@ -7,9 +6,8 @@ import axios from 'axios';
 import { getToken } from '../utilities/Common';
 
 import Highlighter from 'react-highlight-words';
-import Report from './Report';
-import { BrowserRouter as Router } from 'react-router-dom';
-
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 class TableEmployee extends React.Component {
   constructor() {
@@ -58,11 +56,41 @@ class TableEmployee extends React.Component {
     });
   };
 
-  generateReport = () => {
-    //nesto uraditi da prikaze izvjestaj iz Report.js
-    return (
-    <Report/>
-    );
+  generateReport = () => { 
+    this.getEmployees();   
+    this.state = {
+      //ovo people bi trebali biti podaci iz tabele, a ne iz baze :(
+      people: this.state.employees
+    };
+
+    const unit = "pt";
+    const size = "A4"; // Use A1, A2, A3 or A4
+    const orientation = "portrait"; // portrait or landscape
+
+    const marginLeft = 40;
+    const doc = new jsPDF(orientation, unit, size);
+
+    doc.setFontSize(15);
+
+    const title = "Employee report";
+    const headers = [["Name", "Surname", "Email", "Address", "Phone number", "Country", "City"]];
+
+    const data = this.state.people.map(elt => [elt.name, elt.surname, elt.email, elt.address, elt.phoneNumber, elt.country, elt.city]);
+
+    let content = {
+      startY: 50,
+      head: headers,
+      body: data
+    };
+
+    
+    doc.text(title, marginLeft, 40);
+    doc.autoTable(content);
+    //doc.save("report.pdf")
+    doc.setProperties({
+      title: "user_management_web_app_report"
+    });
+    doc.output('dataurlnewwindow');
   };
 
   handleDeleteRow(userId) {
@@ -149,8 +177,6 @@ class TableEmployee extends React.Component {
   });
 
   handleSearch = (selectedKeys, confirm, dataIndex) => {
-
-
     console.log(this.state);
     confirm();
     this.setState({
@@ -166,7 +192,6 @@ class TableEmployee extends React.Component {
 
 
   render() {
-
     let sortedInfo = this.state.sortedInfo;
     let filteredInfo = this.state.filteredInfo;
     sortedInfo = sortedInfo || {};
@@ -281,7 +306,7 @@ class TableEmployee extends React.Component {
     ];
     return (
       <div>
-        <Table columns={columns} dataSource={this.state.employees} onChange={this.handleChange} />
+        <Table id = "table" columns={columns} dataSource={this.state.employees} onChange={this.handleChange} />
         <div id = "container" className="table-operations" style={{ marginTop: '-48px' }}>
           <Button onClick={this.clearAll}>Clear filters and sorters</Button>
           {" "}
