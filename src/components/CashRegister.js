@@ -17,6 +17,10 @@ const columns = [
       },
   },
   {
+    title: 'Cash register name',
+    dataIndex: 'cashRegisterName',
+  },
+  {
     title: 'Manager',
     dataIndex: 'managerId',
   },
@@ -77,7 +81,8 @@ export default class CashRegistersOverview extends Component {
     for(let i=0; i<length; i++) {
         data.push({
             officeId: this.state.officeId,
-            cashRegister: Object.values(this.state.cashRegisters[i]),
+            cashRegister: this.state.cashRegisters[i].id,
+            cashRegisterName: this.state.cashRegisters[i].name,
             managerId: this.state.managerId,
         });
     }   
@@ -85,7 +90,7 @@ export default class CashRegistersOverview extends Component {
     console.log(data);
 
     return (
-      <div style={{height: '75vh'}}>
+      <div style={{height: '79vh'}}>
         <h1>Overview for {this.state.employeeFullName}'s registers</h1>
         <Table columns={columns} dataSource={data} />
       </div>
