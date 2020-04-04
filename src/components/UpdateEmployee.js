@@ -90,7 +90,7 @@ function invalid2() {
         title: 'Server error!',
         content: (
             <div>
-                <p> Error in changing roles!</p>
+                <p> Error in changing roles! Roles didn't change!</p>
             </div>
         ),
         onOk() { },
@@ -209,9 +209,10 @@ class UpdateEmployee extends Component {
               headers: { Authorization: 'Bearer '+getToken()},
               data: newRoles
             }).then(response => {
+              info()
               this.props.history.push('/dashboard/home');
               window.location.reload();
-            }).catch();
+            }).catch(err => invalid2());
         }  
 
 
@@ -323,7 +324,10 @@ class UpdateEmployee extends Component {
                 this.setState({
                     checkedList: []
                 })
-                info()
+            }
+            else 
+            {
+                invalid();
             }
         }
     }
