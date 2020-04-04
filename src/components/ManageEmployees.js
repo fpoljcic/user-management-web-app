@@ -29,30 +29,125 @@ class ManageEmployees extends React.Component {
             searchedColumn2: '',
         };
 
+        this.changeCurrentWorker = this.changeCurrentWorker.bind(this);
     }
 
- 
+    componentWillMount() {
+        this.getEmployees();
+        this.getOffices();
+    }
+
+    componentDidUpdate(prevProps) {
+        // Typical usage (don't forget to compare props):
+        if (this.props.userID !== prevProps.userID) {
+            this.fetchData(this.props.userID);
+        }
+    }
+
+    odgovarajucaRola(e) {
+
+        let flag = true;
+        e.roles.forEach(element => {
+
+            if (element.id < 6 || element.id > 8)
+                flag = false;
+        });
+        return flag;
+    }
 
 
     getEmployees() {
-        
+        axios.get('https://main-server-si.herokuapp.com/api/employees', { headers: { Authorization: 'Bearer ' + getToken() } })
+            .then(response => {
+
+                let filterTest = response.data
+                let niz = filterTest.filter(this.odgovarajucaRola);
+
+                this.setState({ employees: niz }, () => {
+                })
+            })
+            .catch(err => console.log(err));
     }
 
     getOffices() {
 
+        axios.get('https://main-server-si.herokuapp.com/api/business/offices', { headers: { Authorization: 'Bearer ' + getToken() } })
+            .then(response => {
+
+                console.log("offices", response.data);
+                this.setState({ offices: response.data })
+            })
+            .catch(err => console.log(err));
     }
 
+    hiredRadnici(e, data) {
+
+        let flag = true;
+        data.forEach(element => {
+            if (element.id === e.id) flag = false;
+        });
+
+        return flag;
+    }
 
     changeCurrentWorker(userId) {
+
+
+        axios.get('https://main-server-si.herokuapp.com/api/business/employees/' + userId + '/office',
+            { headers: { Authorization: 'Bearer ' + getToken() } })
+            .then(response => {
+
+                let role
+
+                let temp = this.state.employees.find(i => i.userId === userId);
+                let pom = temp.roles[0].id
+
+                if (pom === 7) role = "false";
+                else role = "true";
+
+
+                let filterTest = this.state.offices
+                let fired = response.data
+
+                console.log(fired);
+
+                let niz = filterTest.filter(e => this.hiredRadnici(e, response.data));
+
+
+                console.log("hire", niz, response.data);
+
+                this.setState({ fireoffices: response.data, hireoffices: niz, currentWorkerId: userId, currentRole: role })
+            })
+            .catch(err => {
+                this.setState({ hireoffices: null, fireoffices: null })
+            }
+            );
 
     };
 
 
     hireWorker(office) {
 
-           };
+        console.log(this.state.currentRole);
 
-   
+        axios.request({
+            method: 'post',
+            url: 'https://main-server-si.herokuapp.com/api/business/employees',
+            headers: { Authorization: 'Bearer ' + getToken() },
+            data: {
+                officeId: office,
+                employeeId: this.state.currentWorkerId,
+                cashier: this.state.currentRole
+            }
+        })
+            .then((response) => {
+
+                this.changeCurrentWorker(this.state.currentWorkerId);
+            }, (error) => {
+
+            });
+
+    };
 
 
     getColumnSearchProps1 = dataIndex => ({
@@ -239,7 +334,7 @@ class ManageEmployees extends React.Component {
             }
         ];
 
-        
+     
 
         return (
             <div>
@@ -254,7 +349,7 @@ class ManageEmployees extends React.Component {
                         <h1 style={{ textAlign: "center" }}> Available workplaces</h1>
                         <Table size="small" columns={columns2} dataSource={this.state.hireoffices} />
                     </div>
-                    
+                 
                 </div>
 
             </div >
