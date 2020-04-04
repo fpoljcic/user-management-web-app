@@ -15,6 +15,7 @@ const plainOptions = ['User Manager', 'Warehouse Manager', 'Public Relations Wor
 const defaultCheckedList = ['User Manager'];
 
 let data = [];
+let checkList = defaultCheckedList;
 
 let first = true;
 
@@ -175,7 +176,7 @@ class AddEmployee extends Component {
             case 'city':
                 errors.city =
                     value.length < 3 || boolCity
-                        ? 'City must contain at least 5 characters!'
+                        ? 'City must contain at least 3 characters!'
                         : '';
                 boolCity = false;
                 break;
@@ -229,7 +230,7 @@ class AddEmployee extends Component {
         values.preventDefault();
 
 
-        if (validateForm(this.state.errors)) {
+        if (validateForm(this.state.errors) &&  checkList.length !== 0) {
 
             console.log(data);
 
@@ -450,11 +451,15 @@ class MyCheckBox extends React.Component {
             checkAll: checkedList.length === plainOptions.length,
         });
 
+        checkList = checkedList;
+
         let list = [];
         checkedList.forEach((index) => {
             list.push({ "rolename": giveRole(index) });
         });
         data = list;
+
+        console.log(checkList, checkList.length);
     };
 
     onCheckAllChange = e => {
@@ -464,6 +469,8 @@ class MyCheckBox extends React.Component {
             checkAll: e.target.checked,
         });
 
+
+        checkList = e.target.checked ? plainOptions : [];
 
         let list = [];
         let temp = e.target.checked ? plainOptions : [];
@@ -477,16 +484,7 @@ class MyCheckBox extends React.Component {
         return (
             <div>
                 <div className="site-checkbox-all-wrapper" style={{ width: '50%' }}>
-
-                    <Checkbox
-
-                        indeterminate={this.state.indeterminate}
-                        onChange={this.onCheckAllChange}
-                        checked={this.state.checkAll}
-                    >
-                        Check all
-          </Checkbox>
-
+                 
                 </div>
                 <br />
                 <CheckboxGroup

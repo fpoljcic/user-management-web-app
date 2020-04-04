@@ -1,11 +1,23 @@
-import React, { useState } from 'react';
-import { Table, Input, Button } from 'antd';
+import React from 'react';
+import { Table, Input, Button, Modal } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { getToken } from '../utilities/Common';
 
 
+function invalid() {
+    Modal.info({
+        title: 'Invalid request!',
+        content: (
+            <div>
+                <br />
+                <p>The request that was sent was invalid!</p>
+            </div>
+        ),
+        onOk() { },
+    });
+}
 
 class ManageEmployees extends React.Component {
 
@@ -47,6 +59,8 @@ class ManageEmployees extends React.Component {
     odgovarajucaRola(e) {
 
         let flag = true;
+
+        if (e.roles.size === 0) return false;
         e.roles.forEach(element => {
 
             if (element.id < 6 || element.id > 8)
@@ -119,7 +133,11 @@ class ManageEmployees extends React.Component {
                 this.setState({ fireoffices: response.data, hireoffices: niz, currentWorkerId: userId, currentRole: role })
             })
             .catch(err => {
+
+
+                invalid()
                 this.setState({ hireoffices: null, fireoffices: null })
+
             }
             );
 
@@ -402,7 +420,7 @@ class ManageEmployees extends React.Component {
                         <Table size="small" columns={columns2} dataSource={this.state.hireoffices} />
                     </div>
                     <div style={{ width: '44%', float: "right" }}>
-                        <h1 style={{ textAlign: "center" }}> Current </h1>
+                        <h1 style={{ textAlign: "center" }}> Current workplaces </h1>
                         <Table size="small" columns={columns3} dataSource={this.state.fireoffices} />
                     </div>
                 </div>
