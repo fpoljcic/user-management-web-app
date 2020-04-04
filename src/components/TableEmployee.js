@@ -273,7 +273,7 @@ class TableEmployee extends React.Component {
     ];
     return (
       <div>
-        <Table columns={columns} dataSource={this.state.employees} onChange={this.handleChange} />
+        <Table columns={columns} dataSource={this.state.employees} onChange={this.handleChange} style={{paddingTop: '20px'}}/>
         <div className="table-operations" style={{ marginTop: '-48px' }}>
           <Button onClick={this.clearAll}>Clear filters and sorters</Button>
         </div>
