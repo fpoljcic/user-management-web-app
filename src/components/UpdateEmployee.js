@@ -1,24 +1,89 @@
 import React from 'react';
 import { Component } from 'react';
-import { Input, Col, Row, Form, Select, InputNumber, DatePicker, AutoComplete, Cascader, Modal } from 'antd';
+import { Input, Col, Row, Form, Select, InputNumber, DatePicker, AutoComplete, Cascader, Modal, Checkbox } from 'antd';
 import { Button } from 'antd';
 import axios from 'axios';
 import PublicRoute from '../utilities/PublicRoute';
 import { getToken } from '../utilities/Common';
+const CheckboxGroup = Checkbox.Group;
   
+const plainOptions = ['User Manager', 'Warehouse Manager', 'Public Relations Worker', 'Cashier', 'Bartender'];
+//bartender = 7, merchant = 3, manager = 2, warehouse = 4, pr = 5, cashier =   
+let data = [];
+let podaci = [];
+
+
+function giveCheckboxValue(value) {
+    switch (value) {
+
+        case "ROLE_WAREMAN":
+            return 'Warehouse Manager';
+
+        case "ROLE_PRW":
+            return 'Public Relations Worker';
+           
+        case "ROLE_MANAGER":
+            return 'User Manager';
+            
+        case "ROLE_CASHIER":
+            return 'Cashier';
+            
+        case "ROLE_BARTENDER":
+            return 'Bartender';
+            
+        default:
+            return "";
+    }
+
+}
+
+function giveRole(value) {
+    switch (value) {
+
+        case 'Warehouse Manager':
+            return "ROLE_WAREMAN";
+
+        case 'Public Relations Worker':
+            return "ROLE_PRW";
+
+        case 'User Manager':
+            return "ROLE_MANAGER";
+
+        case 'Cashier':
+            return "ROLE_CASHIER";
+
+        case 'Bartender':
+            return "ROLE_BARTENDER";
+
+        default:
+            return "";
+    }
+
+}
 
 function invalid() {
     Modal.info({
         title: 'Invalid update!',
         content: (
             <div>
-                <p></p>
+                <p>Values are not valid!</p>
             </div>
         ),
         onOk() { },
     });
 }
 
+function invalid1() {
+    Modal.info({
+        title: 'Server error!',
+        content: (
+            <div>
+                <p> Error in updating employee!</p>
+            </div>
+        ),
+        onOk() { },
+    });
+}
 
 function info() {
     Modal.info({
@@ -32,6 +97,8 @@ function info() {
     });
 }
 
+
+const validPhoneNumber = RegExp(/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/g);
 const validateForm = (errors) => {
     let valid = true;
     Object.values(errors).forEach(
@@ -42,6 +109,9 @@ const validateForm = (errors) => {
   
  
 class UpdateEmployee extends Component {
+    state = {
+        checkedList:[]
+    }
     constructor(props) {
         super(props);
         this.state = {
@@ -51,6 +121,12 @@ class UpdateEmployee extends Component {
             city: '',
             country: '',
             phoneNumber: '',
+            roles:[],
+            jmbg: '',
+            dateOfBirth: '',
+            checkedList:[],
+            indeterminate: true,
+            checkAll: false,
             errors: {
                 name: '',
                 username: '',
@@ -83,8 +159,19 @@ class UpdateEmployee extends Component {
             city: response.data.city,
             country: response.data.country,
             phoneNumber: response.data.phoneNumber,
+            roles: response.data.roles,
+            jmbg: response.data.jmbg,
+            dateOfBirth: response.data.dateOfBirth,
+            checkedList: []
           }, (res) => {
-            console.log(this.state);
+            for (let i = 0 ; i < this.state.roles.length; i++)
+            {
+               
+                podaci.push(giveCheckboxValue(this.state.roles[i].rolename));
+            }
+            this.setState({
+                checkedList: podaci
+            })
           });
         })
         .catch(err => console.log(err));
@@ -99,7 +186,7 @@ class UpdateEmployee extends Component {
               data: newMeetup
             }).then(response => {
               this.props.history.push('/dashboard/home');
-            }).catch(err => invalid());
+            }).catch(err => invalid1());
           }
 
 
@@ -144,7 +231,7 @@ class UpdateEmployee extends Component {
                 break;
             case 'phoneNumber':
                 errors.phoneNumber =
-                    value.length < 6 || value.match(/^[0-9a-zA-Z]+$/) 
+                    value.length < 12 || validPhoneNumber.test(value)
                         ? 'Phone number is not valid!'
                         : '';
                 break;
@@ -158,12 +245,54 @@ class UpdateEmployee extends Component {
     handleSubmit = (event) => {
         event.preventDefault();
         if (validateForm(this.state.errors)) {
-            this.editEmployee(this.state)
+            let zaposlenik = 
+            {
+                name: this.state.name,
+                surname: this.state.surname, 
+                address: this.state.address,
+                city: this.state.city,
+                country: this.state.country,
+                phoneNumber: this.state.phoneNumber,
+                roles: this.state.roles,
+                jmbg: this.state.jmbg,
+                dateOfBirth: this.state.dateOfBirth
+            }
+            this.editEmployee(zaposlenik)
             info()
-        } else {
-            invalid()
         }
     }
+
+      
+    onChange = checkedList => {
+
+        this.setState({
+            checkedList: checkedList,
+            indeterminate: !!checkedList.length && checkedList.length < plainOptions.length,
+            checkAll: checkedList.length === plainOptions.length,
+        });
+
+        let list = [];
+        checkedList.forEach((index) => {
+            list.push({ "rolename": giveRole(index) });
+        });
+        data = list;
+    };
+
+    onCheckAllChange = e => {
+        this.setState({
+            checkedList: e.target.checked ? plainOptions : [],
+            indeterminate: false,
+            checkAll: e.target.checked,
+        });
+
+
+        let list = [];
+        let temp = e.target.checked ? plainOptions : [];
+        temp.forEach((index) => {
+            list.push({ "rolename": giveRole(index) });
+        });
+        data = list;
+    };
  
     render() {
         const { errors } = this.state;
@@ -240,8 +369,30 @@ class UpdateEmployee extends Component {
  
                     <br />
                     <br />
+                    <div>
+            
+                <div className="site-checkbox-all-wrapper" style={{ width: '50%' }}>
+
+                    <Checkbox
+
+                        indeterminate={this.state.indeterminate}
+                        onChange={this.onCheckAllChange}
+                        checked={this.state.checkAll}
+                    >
+                        Check all
+          </Checkbox>
+
+                </div>
+                <br />
+                <CheckboxGroup
+                    options={plainOptions}
+                    value={this.state.checkedList}
+                    onChange={this.onChange}
+                />
+            </div>
+                
                     <br />
- 
+                    <br />             
  
                     <div style={{ marginTop: '%' }}>
                         <Button type="primary" style={{ width: '56%' }} onClick={this.handleSubmit} > Submit</Button>
@@ -252,7 +403,6 @@ class UpdateEmployee extends Component {
         );
     }
 }
- 
  
 export default UpdateEmployee;
  
