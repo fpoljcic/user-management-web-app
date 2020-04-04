@@ -12,7 +12,6 @@ const plainOptions = ['User Manager', 'Warehouse Manager', 'Public Relations Wor
 let data = [];
 let podaci = [];
 
-
 function giveCheckboxValue(value) {
     switch (value) {
 
@@ -65,6 +64,18 @@ function giveRole(value) {
             return "";
     }
 
+}
+
+function invalidPR() {
+    Modal.info({
+        title: 'Invalid update!',
+        content: (
+            <div>
+                <p>Only PR workers can be in Customer Support!</p>
+            </div>
+        ),
+        onOk() { },
+    });
 }
 
 function invalid() {
@@ -325,11 +336,16 @@ class UpdateEmployee extends Component {
                         }
                     } 
                 }
-                this.changeRoles({newRoles: pomocna});
-                this.state.checkedList = []
-                this.setState({
-                    checkedList: []
-                })
+                if(this.state.checkedList.includes("Customer Support") && !this.state.checkedList.includes("Public Relations Worker")) {
+                    invalidPR();
+                    window.location.reload();
+                } else {
+                    this.changeRoles({newRoles: pomocna});
+                    this.state.checkedList = []
+                    this.setState({
+                        checkedList: []
+                    })
+                }             
             }
             else 
             {
