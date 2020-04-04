@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Table, Input, Button } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
@@ -35,6 +35,13 @@ class ManageEmployees extends React.Component {
     componentWillMount() {
         this.getEmployees();
         this.getOffices();
+    }
+
+    componentDidUpdate(prevProps) {
+        // Typical usage (don't forget to compare props):
+        if (this.props.userID !== prevProps.userID) {
+            this.fetchData(this.props.userID);
+        }
     }
 
     odgovarajucaRola(e) {
@@ -144,7 +151,24 @@ class ManageEmployees extends React.Component {
 
     fireWorker(office) {
 
-      
+        axios.request({
+            method: 'delete',
+            url: 'https://main-server-si.herokuapp.com/api/business/employees',
+            headers: { Authorization: 'Bearer ' + getToken() },
+            data: {
+                officeId: office,
+                employeeId: this.state.currentWorkerId
+            }
+
+        }).then(response => {
+
+
+            this.changeCurrentWorker(this.state.currentWorkerId);
+
+        }).catch((err) => {
+            console.log(err)
+        })
+
     };
 
 
@@ -378,7 +402,7 @@ class ManageEmployees extends React.Component {
                         <Table size="small" columns={columns2} dataSource={this.state.hireoffices} />
                     </div>
                     <div style={{ width: '44%', float: "right" }}>
-                        <h1 style={{ textAlign: "center" }}> Current workplaces </h1>
+                        <h1 style={{ textAlign: "center" }}> Current </h1>
                         <Table size="small" columns={columns3} dataSource={this.state.fireoffices} />
                     </div>
                 </div>
