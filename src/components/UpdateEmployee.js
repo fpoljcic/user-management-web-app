@@ -7,11 +7,10 @@ import PublicRoute from '../utilities/PublicRoute';
 import { getToken } from '../utilities/Common';
 const CheckboxGroup = Checkbox.Group;
   
-const plainOptions = ['User Manager', 'Warehouse Manager', 'Public Relations Worker', 'Cashier', 'Bartender'];
+const plainOptions = ['User Manager', 'Warehouse Manager', 'Public Relations Worker', 'Cashier', 'Bartender', 'Customer Support'];
 //bartender = 7, merchant = 3, manager = 2, warehouse = 4, pr = 5, cashier =   
 let data = [];
 let podaci = [];
-
 
 function giveCheckboxValue(value) {
     switch (value) {
@@ -21,7 +20,10 @@ function giveCheckboxValue(value) {
 
         case "ROLE_PRW":
             return 'Public Relations Worker';
-           
+            
+        case "ROLE_PRP":
+            return 'Customer Support';       
+        
         case "ROLE_MANAGER":
             return 'User Manager';
             
@@ -46,6 +48,9 @@ function giveRole(value) {
         case 'Public Relations Worker':
             return "ROLE_PRW";
 
+        case 'Customer Support':
+            return "ROLE_PRP";                
+
         case 'User Manager':
             return "ROLE_MANAGER";
 
@@ -59,6 +64,18 @@ function giveRole(value) {
             return "";
     }
 
+}
+
+function invalidPR() {
+    Modal.info({
+        title: 'Invalid update!',
+        content: (
+            <div>
+                <p>Only PR workers can be in Customer Support!</p>
+            </div>
+        ),
+        onOk() { },
+    });
 }
 
 function invalid() {
@@ -319,11 +336,16 @@ class UpdateEmployee extends Component {
                         }
                     } 
                 }
-                this.changeRoles({newRoles: pomocna});
-                this.state.checkedList = []
-                this.setState({
-                    checkedList: []
-                })
+                if(this.state.checkedList.includes("Customer Support") && !this.state.checkedList.includes("Public Relations Worker")) {
+                    invalidPR();
+                    window.location.reload();
+                } else {
+                    this.changeRoles({newRoles: pomocna});
+                    this.state.checkedList = []
+                    this.setState({
+                        checkedList: []
+                    })
+                }             
             }
             else 
             {

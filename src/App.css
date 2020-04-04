@@ -1,7 +1,7 @@
 @import '~antd/dist/antd.css';
 
 .content, body {
-  background-image: url("/background.jpg");
+  background-image: '/background.jpg';
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -11,9 +11,32 @@
 }
 
 .footerStyle {
-  color: lightgray;
-  background-color: rgba(0, 21, 41, 0.84);
+  color: rgb(161, 161, 161);
+  background-color: rgb(000,021,041);
   text-align: center;
-  padding-top: 0.8%;
-  padding-bottom: 0.8%;
+
+  
+  bottom: 0px;
+  font-family: Roboto-Regular;
+}
+
+.headerStyle {
+  font-family: Roboto-Regular;
+  box-shadow: 2px 0px;
+}
+
+.animatedLine {
+  width: 400px;
+  height: 1px;
+  background: rgb(024,144,255);
+  margin: auto;
+  animation: wiggleLine 2s forwards;	
+}
+
+@keyframes wiggleLine {
+  from {
+      transform: scale(.1,.1);
+  } to {
+      transform: scale(1,1);
+  }
 }
