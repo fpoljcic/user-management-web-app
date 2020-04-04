@@ -1,11 +1,23 @@
 import React, { useState } from 'react';
-import { Table, Input, Button } from 'antd';
+import { Table, Input, Button, Modal } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { getToken } from '../utilities/Common';
 
 
+function invalid() {
+    Modal.info({
+        title: 'Invalid request!',
+        content: (
+            <div>
+                <br />
+                <p>The request that was sent was invalid!</p>
+            </div>
+        ),
+        onOk() { },
+    });
+}
 
 class ManageEmployees extends React.Component {
 
@@ -32,6 +44,7 @@ class ManageEmployees extends React.Component {
         this.changeCurrentWorker = this.changeCurrentWorker.bind(this);
     }
 
+    
     componentWillMount() {
         this.getEmployees();
         this.getOffices();
@@ -119,6 +132,8 @@ class ManageEmployees extends React.Component {
                 this.setState({ fireoffices: response.data, hireoffices: niz, currentWorkerId: userId, currentRole: role })
             })
             .catch(err => {
+
+                invalid();
                 this.setState({ hireoffices: null, fireoffices: null })
             }
             );
