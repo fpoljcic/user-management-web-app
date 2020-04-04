@@ -84,14 +84,12 @@ Merchant mora imati mogućnost pregleda kojim kasama uposlenici mogu pristupiti.
 # Feature
 Dodavanje / uklanjanje privilegija uposlenicima
 ## Item
-Merchant mora imati mogućnost dodavanja / uklanjanja privilegija uposlenicima nad kasama.
+Merchant mora imati mogućnost dodavanja / uklanjanja privilegija postojećim uposlenicima sistema.
 ### Task
-* Kreirati izgled stranice za dodavanje / uklanjanje privilegija uposlenicima nad kasama
-* Implementirati dobavljanje potrebnih podataka za sve uposlenike sa servera
-* Implementirati funkcionalnost dodavanja privilegije određenom uposleniku nad određenom kasom slanjem zahtjeva prema serveru
-* Implementirati funkcionalnost uklanjanja privilegije određenom uposleniku nad određenom kasom slanjem zahtjeva prema serveru
-* Implementirati ispis poruke o (ne)uspješnom dodavanju privilegija
-* Implementirati ispis poruke o (ne)uspješnom uklanjanju privilegija
+* Dodati potrebne kontrole za ažuriranje privilegija uposlenicima
+* Dodati potrebnu validaciju nad kontrolama
+* Implementirati slanje zahtjeva prema serveru nakon odabira novih privilegija
+* Implementirati ispis poruke o (ne)uspješnom ažuriranju privilegija
 * Uraditi push koda
 * Napraviti pull request
 
@@ -155,12 +153,13 @@ Merchant mora imati mogućnost pregleda historije zaposlenja za svakog uposlenik
 * Napraviti pull request
 
 # Feature
-Pregled historije narudžbi
+Pregled zatvorenih računa
 ## Item
-Merchant mora imati mogućnost pregleda historije narudžbi za svakog korisnika sistema.
+Merchant mora imati mogućnost pregleda zatvorenih računa za svakog uposlenika na kasi.
 ### Task
-* Kreirati izgled stranice za pregled historije narudžbi željenog uposlenika
-* Implementirati dobavljanje potrebnih podataka za izabranog uposlenika sa servera
+* Kreirati izgled stranice za pregled historije zatvorenih računa željenog uposlenika
+* Implementirati dobavljanje potrebnih podataka za izabranog uposlenika (cashier-a) sa servera
+* Dodati preusmjerenje na ovu stranicu nakon odabira uposlenika
 * Uraditi push koda
 * Napraviti pull request
 
