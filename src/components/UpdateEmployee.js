@@ -243,22 +243,28 @@ class UpdateEmployee extends Component {
     }
  
     handleSubmit = (event) => {
-        event.preventDefault();
-        if (validateForm(this.state.errors)) {
-            let zaposlenik = 
-            {
-                name: this.state.name,
-                surname: this.state.surname, 
-                address: this.state.address,
-                city: this.state.city,
-                country: this.state.country,
-                phoneNumber: this.state.phoneNumber,
-                roles: this.state.roles,
-                jmbg: this.state.jmbg,
-                dateOfBirth: this.state.dateOfBirth
+        if (this.state.checkedList.length === 0)
+        {
+            invalid();
+        }
+        else{
+            event.preventDefault();
+            if (validateForm(this.state.errors)) {
+                let zaposlenik = 
+                {
+                    name: this.state.name,
+                    surname: this.state.surname, 
+                    address: this.state.address,
+                    city: this.state.city,
+                    country: this.state.country,
+                    phoneNumber: this.state.phoneNumber,
+                    roles: this.state.roles,
+                    jmbg: this.state.jmbg,
+                    dateOfBirth: this.state.dateOfBirth
+                }
+                this.editEmployee(zaposlenik)
+                info()
             }
-            this.editEmployee(zaposlenik)
-            info()
         }
     }
 
