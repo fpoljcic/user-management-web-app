@@ -85,6 +85,18 @@ function invalid1() {
     });
 }
 
+function invalid2() {
+    Modal.info({
+        title: 'Server error!',
+        content: (
+            <div>
+                <p> Error in changing roles!</p>
+            </div>
+        ),
+        onOk() { },
+    });
+}
+
 function info() {
     Modal.info({
         title: 'Successful update!',
@@ -164,9 +176,9 @@ class UpdateEmployee extends Component {
             dateOfBirth: response.data.dateOfBirth,
             checkedList: []
           }, (res) => {
+            console.log(response.data);
             for (let i = 0 ; i < this.state.roles.length; i++)
             {
-               
                 podaci.push(giveCheckboxValue(this.state.roles[i].rolename));
             }
             this.setState({
@@ -188,6 +200,19 @@ class UpdateEmployee extends Component {
               this.props.history.push('/dashboard/home');
             }).catch(err => invalid1());
           }
+
+        changeRoles(newRoles) {
+            let employee = this.props.match.params.id;
+            axios.request({
+              method:'put',
+              url:`https://main-server-si.herokuapp.com/api/users/roles/${employee}`,
+              headers: { Authorization: 'Bearer '+getToken()},
+              data: newRoles
+            }).then(response => {
+              this.props.history.push('/dashboard/home');
+              window.location.reload();
+            }).catch();
+        }  
 
 
     handleChange = (event) => {
@@ -247,7 +272,8 @@ class UpdateEmployee extends Component {
         {
             invalid();
         }
-        else{
+        else
+        {
             event.preventDefault();
             if (validateForm(this.state.errors)) {
                 let zaposlenik = 
@@ -263,11 +289,49 @@ class UpdateEmployee extends Component {
                     dateOfBirth: this.state.dateOfBirth
                 }
                 this.editEmployee(zaposlenik)
+            
+                let pomocna = [];
+                let postoji = false;
+                for (let j = 0; j < this.state.checkedList.length; j++)
+                {
+                if(j===0)
+                pomocna.push({rolename: giveRole(this.state.checkedList[j])});
+                
+                    
+                    else
+                    {
+                        for (let l = 0; l < pomocna.length; l++)
+                        {
+                            if (pomocna[l].rolename === (giveRole(this.state.checkedList[j])))
+                                {
+                                    postoji = true;
+                                }
+                        }
+                        if (postoji == false)
+                        {
+                            pomocna.push({rolename: giveRole(this.state.checkedList[j])});
+                        }
+                        else 
+                        {
+                            postoji = false;
+                            continue;
+                        }
+                    } 
+                }
+                this.changeRoles({newRoles: pomocna});
+                this.state.checkedList = []
+                this.setState({
+                    checkedList: []
+                })
                 info()
             }
         }
     }
-
+    
+    handleCancel = (event) => {
+        this.props.history.push('/dashboard/home');
+        window.location.reload();
+    }
       
     onChange = checkedList => {
 
@@ -376,7 +440,7 @@ class UpdateEmployee extends Component {
                     <br />
                     <br />
                     <div>
-            
+                  
                 <div className="site-checkbox-all-wrapper" style={{ width: '50%' }}>
 
                     <Checkbox
@@ -396,12 +460,15 @@ class UpdateEmployee extends Component {
                     onChange={this.onChange}
                 />
             </div>
-                
+                 
                     <br />
                     <br />             
  
                     <div style={{ marginTop: '%' }}>
                         <Button type="primary" style={{ width: '56%' }} onClick={this.handleSubmit} > Submit</Button>
+                        <br />
+                        <br /> 
+                        <Button type="primary" style={{ width: '56%' }} onClick={this.handleCancel} > Cancel editing</Button>
                     </div>
                 </div>
                 </Form>
