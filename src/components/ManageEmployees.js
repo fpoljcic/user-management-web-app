@@ -1,23 +1,11 @@
-import React, { useState } from 'react';
-import { Table, Input, Button, Modal } from 'antd';
+import React from 'react';
+import { Table, Input, Button } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { getToken } from '../utilities/Common';
 
 
-function invalid() {
-    Modal.info({
-        title: 'Invalid request!',
-        content: (
-            <div>
-                <br />
-                <p>The request that was sent was invalid!</p>
-            </div>
-        ),
-        onOk() { },
-    });
-}
 
 class ManageEmployees extends React.Component {
 
@@ -44,17 +32,9 @@ class ManageEmployees extends React.Component {
         this.changeCurrentWorker = this.changeCurrentWorker.bind(this);
     }
 
-    
     componentWillMount() {
         this.getEmployees();
         this.getOffices();
-    }
-
-    componentDidUpdate(prevProps) {
-        // Typical usage (don't forget to compare props):
-        if (this.props.userID !== prevProps.userID) {
-            this.fetchData(this.props.userID);
-        }
     }
 
     odgovarajucaRola(e) {
@@ -132,8 +112,6 @@ class ManageEmployees extends React.Component {
                 this.setState({ fireoffices: response.data, hireoffices: niz, currentWorkerId: userId, currentRole: role })
             })
             .catch(err => {
-
-                invalid();
                 this.setState({ hireoffices: null, fireoffices: null })
             }
             );
@@ -162,6 +140,11 @@ class ManageEmployees extends React.Component {
 
             });
 
+    };
+
+    fireWorker(office) {
+
+      
     };
 
 
@@ -349,7 +332,37 @@ class ManageEmployees extends React.Component {
             }
         ];
 
-     
+        const columns3 = [
+            {
+                title: 'ID',
+                dataIndex: 'id',
+                key: 'id',
+                width: '10%',
+                ...this.getColumnSearchProps2('ID'),
+            },
+            {
+                title: 'Address',
+                dataIndex: 'address',
+                key: 'address',
+                width: '20%',
+                ...this.getColumnSearchProps2('address'),
+            },
+            {
+                title: 'City',
+                dataIndex: 'city',
+                width: '20%',
+                key: 'surname',
+                ...this.getColumnSearchProps2('city'),
+            },
+            {
+                title: 'Fire',
+                dataIndex: 'offices',
+                render: (text, record) =>
+                    2 >= 1 ? (
+                        <Button type="primary" onClick={i => this.fireWorker(record.id)} > Fire </Button>
+                    ) : null,
+            }
+        ];
 
         return (
             <div>
@@ -360,11 +373,14 @@ class ManageEmployees extends React.Component {
                     </div>
                     <br />
 
-                    <div style={{ width: '50%', margin: '0 auto' }}>
+                    <div style={{ width: '44%', float: "left" }}>
                         <h1 style={{ textAlign: "center" }}> Available workplaces</h1>
                         <Table size="small" columns={columns2} dataSource={this.state.hireoffices} />
                     </div>
-                 
+                    <div style={{ width: '44%', float: "right" }}>
+                        <h1 style={{ textAlign: "center" }}> Current workplaces </h1>
+                        <Table size="small" columns={columns3} dataSource={this.state.fireoffices} />
+                    </div>
                 </div>
 
             </div >
