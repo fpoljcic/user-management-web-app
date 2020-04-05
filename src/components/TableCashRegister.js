@@ -65,8 +65,8 @@ export default class CashRegistersOverview extends Component {
 
   getEmployeeNameFromId() {
     // Make a request for an employee name with a given ID
-    const employee = this.props.match.params.id;
-    axios.get(`https://main-server-si.herokuapp.com/api/users/${employee}`, { headers: { Authorization: 'Bearer ' + getToken() } })
+    const id = this.props.match.params.id;
+    axios.get(`https://main-server-si.herokuapp.com/api/users/${id}/username`, { headers: { Authorization: 'Bearer ' + getToken() } })
       .then(response => {
         this.setState({
           employeeFullName: `${response.data.name} ${response.data.surname}`
