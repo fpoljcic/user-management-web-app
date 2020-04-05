@@ -55,35 +55,35 @@ class TableEmployee extends React.Component {
     this.setState({
       filteredInfo: null,
       sortedInfo: null,
-      searchText: '' 
+      searchText: ''
     });
   };
 
-  handleDeleteRow(userId){
+  handleDeleteRow(userId) {
     let i;
     let rows = [...this.state.employees]
-    for(i=0; i<rows.length; i++)
-      if(rows[i].userId == userId) break;
-    
-    if(window.confirm('Delete the item?')){
+    for (i = 0; i < rows.length; i++)
+      if (rows[i].userId == userId) break;
+
+    if (window.confirm('Delete the item?')) {
       this.deleteEmployee(userId, rows[i]);
-      
-      rows.splice(i,1);
+
+      rows.splice(i, 1);
       this.setState({
         employees: rows
       });
     }
   };
-  
-  deleteEmployee(userId, employeeObject){
-    
+
+  deleteEmployee(userId, employeeObject) {
+
     axios.request({
-      method:'delete',
-      url:`https://main-server-si.herokuapp.com/api/employees/${userId}`,
-      headers: { Authorization: 'Bearer '+getToken()},
+      method: 'delete',
+      url: `https://main-server-si.herokuapp.com/api/employees/${userId}`,
+      headers: { Authorization: 'Bearer ' + getToken() },
       data: employeeObject
     }).then(response => {
-      
+
     }).catch((err) => {
       console.log(err)
     });
@@ -138,13 +138,13 @@ class TableEmployee extends React.Component {
         />
       ) : (
           text
-        ),      
-   
+        ),
+
   });
 
   handleSearch = (selectedKeys, confirm, dataIndex) => {
 
-    
+
     console.log(this.state);
     confirm();
     this.setState({
@@ -160,7 +160,7 @@ class TableEmployee extends React.Component {
 
 
   render() {
-    
+
     let sortedInfo = this.state.sortedInfo;
     let filteredInfo = this.state.filteredInfo;
     sortedInfo = sortedInfo || {};
@@ -171,10 +171,10 @@ class TableEmployee extends React.Component {
         dataIndex: 'userId',
         key: 'userId',
         filteredValue: filteredInfo.userId || null,
-        sorter: (a, b) =>  a.userId - b.userId,
+        sorter: (a, b) => a.userId - b.userId,
         sortOrder: sortedInfo.columnKey === 'userId' && sortedInfo.order,
         ellipsis: true,
-        ...this.getColumnSearchProps('userId'),
+        ...this.getColumnSearchProps('userId')
       },
       {
         title: 'Name',
@@ -184,7 +184,7 @@ class TableEmployee extends React.Component {
         sorter: (a, b) => { return a.name.localeCompare(b.name) },
         sortOrder: sortedInfo.columnKey === 'name' && sortedInfo.order,
         ellipsis: true,
-        ...this.getColumnSearchProps('name'),
+        ...this.getColumnSearchProps('name')
       },
       {
         title: 'Surname',
@@ -194,27 +194,27 @@ class TableEmployee extends React.Component {
         sorter: (a, b) => { return a.surname.localeCompare(b.surname) },
         sortOrder: sortedInfo.columnKey === 'surname' && sortedInfo.order,
         ellipsis: true,
-        ...this.getColumnSearchProps('surname'),
+        ...this.getColumnSearchProps('surname')
       },
       {
         title: 'JMBG',
         dataIndex: 'jmbg',
         key: 'jmbg',
         filteredValue: filteredInfo.jmbg || null,
-        sorter: (a, b) =>  a.jmbg - b.jmbg,
+        sorter: (a, b) => a.jmbg - b.jmbg,
         sortOrder: sortedInfo.columnKey === 'jmbg' && sortedInfo.order,
         ellipsis: true,
-        ...this.getColumnSearchProps('jmbg'),
+        ...this.getColumnSearchProps('jmbg')
       },
       {
         title: 'Birthdate',
         dataIndex: 'dateOfBirth',
         key: 'dateOfBirth',
         filteredValue: filteredInfo.userId || null,
-        sorter: (a, b) => moment(a.dateOfBirth,dateFormat).unix() - moment(b.dateOfBirth,dateFormat).unix(),
+        sorter: (a, b) => moment(a.dateOfBirth, dateFormat).unix() - moment(b.dateOfBirth, dateFormat).unix(),
         sortOrder: sortedInfo.columnKey === 'dateOfBirth' && sortedInfo.order,
         ellipsis: true,
-        ...this.getColumnSearchProps('dateOfBirth'),
+        ...this.getColumnSearchProps('dateOfBirth')
       },
       {
         title: 'Email',
@@ -224,7 +224,7 @@ class TableEmployee extends React.Component {
         sorter: (a, b) => { return a.email.localeCompare(b.email) },
         sortOrder: sortedInfo.columnKey === 'email' && sortedInfo.order,
         ellipsis: true,
-        ...this.getColumnSearchProps('email'),
+        ...this.getColumnSearchProps('email')
       },
       {
         title: 'Address',
@@ -234,7 +234,7 @@ class TableEmployee extends React.Component {
         sorter: (a, b) => { return a.address.localeCompare(b.address) },
         sortOrder: sortedInfo.columnKey === 'address' && sortedInfo.order,
         ellipsis: true,
-        ...this.getColumnSearchProps('address'),
+        ...this.getColumnSearchProps('address')
       },
       {
         title: 'Phone',
@@ -244,7 +244,7 @@ class TableEmployee extends React.Component {
         sorter: (a, b) => { return a.phoneNumber.localeCompare(b.phoneNumber) },
         sortOrder: sortedInfo.columnKey === 'phoneNumber' && sortedInfo.order,
         ellipsis: true,
-        ...this.getColumnSearchProps('phoneNumber'),
+        ...this.getColumnSearchProps('phoneNumber')
       },
       {
         title: 'Country',
@@ -254,7 +254,7 @@ class TableEmployee extends React.Component {
         sorter: (a, b) => { return a.country.localeCompare(b.country) },
         sortOrder: sortedInfo.columnKey === 'country' && sortedInfo.order,
         ellipsis: true,
-        ...this.getColumnSearchProps('country'),
+        ...this.getColumnSearchProps('country')
       },
       {
         title: 'City',
@@ -264,33 +264,29 @@ class TableEmployee extends React.Component {
         sorter: (a, b) => { return a.city.localeCompare(b.city) },
         sortOrder: sortedInfo.columnKey === 'city' && sortedInfo.order,
         ellipsis: true,
-        ...this.getColumnSearchProps('city'),
+        ...this.getColumnSearchProps('city')
       },
       {
         title: 'Edit',
         dataIndex: 'edit',
-        render: (text, record) =>
-          2 >= 1 ? (
-            <Link to={`/dashboard/update_employee/${record.userId}`}> Edit</Link>
-          ) : null,
+        render: (text, record) => (
+          <Link to={`/dashboard/update_employee/${record.userId}`}>Edit</Link>
+        )
       },
       {
         title: 'Delete',
         dataIndex: 'delete',
-        render : (text, record) =>
-        2>=1 ? (
-          
-          <button onClick={i=>this.handleDeleteRow(record.userId)}>Delete</button>
-          
-        ) : null,
+        render: (text, record) => (
+          <Button danger onClick={i => this.handleDeleteRow(record.userId)}>Delete</Button>
+        )
       }
     ];
     return (
       <div>
-        <div className="table-operations">
+        <Table columns={columns} dataSource={this.state.employees} onChange={this.handleChange} />
+        <div className="table-operations" style={{ marginTop: '-48px' }}>
           <Button onClick={this.clearAll}>Clear filters and sorters</Button>
         </div>
-        <Table columns={columns} dataSource={this.state.employees} onChange={this.handleChange} />
       </div>
     );
   }
