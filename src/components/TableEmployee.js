@@ -6,6 +6,9 @@ import axios from 'axios';
 import { getToken } from '../utilities/Common';
 
 import Highlighter from 'react-highlight-words';
+
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 import moment from 'moment'
 
 const dateFormat = 'DD.MM.YYYY';
@@ -25,8 +28,6 @@ class TableEmployee extends React.Component {
   componentWillMount() {
     this.getEmployees();
   }
-
-
 
   getEmployees() {
     axios.get('https://main-server-si.herokuapp.com/api/employees', { headers: { Authorization: 'Bearer ' + getToken() } })
@@ -59,7 +60,73 @@ class TableEmployee extends React.Component {
     });
   };
 
-  handleDeleteRow(userId) {
+
+  generateReport = () => { 
+    let filtered = [];
+    for (var key in this.state.filteredInfo) {
+      if (this.state.filteredInfo.hasOwnProperty(key) && this.state.filteredInfo[key] != null) {
+        filtered.push({
+          key: key,
+          value: this.state.filteredInfo[key][0]
+        });
+      }
+    }
+
+    // filtriranje
+    let newEmployees = this.state.employees.filter((emp) => {
+      for (let element of filtered) {
+        if (emp[element.key] !== element.value) {
+          return false;
+        }
+      }
+      return true;
+    });
+
+    // sortiranje
+    if(this.state.sortedInfo !== null) {
+      if (this.state.sortedInfo.order) {
+        key = this.state.sortedInfo.columnKey
+        let order = this.state.sortedInfo.order === "ascend" ? 1 : -1;
+        newEmployees.sort((emp1, emp2) => {
+          if (key === "userId")
+            return (emp1[key] - emp2[key]) * order;
+          return emp1[key].localeCompare(emp2[key]) * order;
+        });
+      }
+    }
+
+    // zaposleni sa tabele
+    console.log(newEmployees);
+       
+    const unit = "pt";
+    const size = "A4"; 
+    const orientation = "portrait"; 
+
+    const marginLeft = 40;
+    const doc = new jsPDF(orientation, unit, size);
+
+    doc.setFontSize(15);
+
+    const title = "Employee report";
+    const headers = [["Name", "Surname", "Email", "Address", "Phone number", "Country", "City"]];
+
+    const data = newEmployees.map(elt => [elt.name, elt.surname, elt.email, elt.address, elt.phoneNumber, elt.country, elt.city]);
+    let content = {
+      startY: 50,
+      head: headers,
+      body: data
+    };
+    
+    doc.text(title, marginLeft, 40);
+    doc.autoTable(content);
+    doc.setProperties({
+      title: "user_management_web_app_report"
+    });
+    doc.output('dataurlnewwindow');
+    doc.save('user_management_web_app_report');
+  };
+
+  handleDeleteRow(userId){
     let i;
     let rows = [...this.state.employees]
     for (i = 0; i < rows.length; i++)
@@ -143,8 +210,6 @@ class TableEmployee extends React.Component {
   });
 
   handleSearch = (selectedKeys, confirm, dataIndex) => {
-
-
     console.log(this.state);
     confirm();
     this.setState({
@@ -160,7 +225,6 @@ class TableEmployee extends React.Component {
 
 
   render() {
-
     let sortedInfo = this.state.sortedInfo;
     let filteredInfo = this.state.filteredInfo;
     sortedInfo = sortedInfo || {};
@@ -286,6 +350,8 @@ class TableEmployee extends React.Component {
         <Table columns={columns} dataSource={this.state.employees} onChange={this.handleChange} />
         <div className="table-operations" style={{ marginTop: '-48px' }}>
           <Button onClick={this.clearAll}>Clear filters and sorters</Button>
+          {" "}
+          <Button onClick={this.generateReport}>Generate report</Button>
         </div>
       </div>
     );
