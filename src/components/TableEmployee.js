@@ -6,8 +6,12 @@ import axios from 'axios';
 import { getToken } from '../utilities/Common';
 
 import Highlighter from 'react-highlight-words';
+
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import moment from 'moment'
+
+const dateFormat = 'DD.MM.YYYY';
 
 class TableEmployee extends React.Component {
   constructor() {
@@ -52,7 +56,7 @@ class TableEmployee extends React.Component {
     this.setState({
       filteredInfo: null,
       sortedInfo: null,
-      searchText: ''
+      searchText: '' 
     });
   };
 
@@ -121,31 +125,31 @@ class TableEmployee extends React.Component {
     doc.save('user_management_web_app_report');
   };
 
-  handleDeleteRow(userId) {
+  handleDeleteRow(userId){
     let i;
     let rows = [...this.state.employees]
-    for (i = 0; i < rows.length; i++)
-      if (rows[i].userId == userId) break;
-
-    if (window.confirm('Delete the item?')) {
+    for(i=0; i<rows.length; i++)
+      if(rows[i].userId == userId) break;
+    
+    if(window.confirm('Delete the item?')){
       this.deleteEmployee(userId, rows[i]);
-
-      rows.splice(i, 1);
+      
+      rows.splice(i,1);
       this.setState({
         employees: rows
       });
     }
   };
-
-  deleteEmployee(userId, employeeObject) {
-
+  
+  deleteEmployee(userId, employeeObject){
+    
     axios.request({
-      method: 'delete',
-      url: `https://main-server-si.herokuapp.com/api/employees/${userId}`,
-      headers: { Authorization: 'Bearer ' + getToken() },
+      method:'delete',
+      url:`https://main-server-si.herokuapp.com/api/employees/${userId}`,
+      headers: { Authorization: 'Bearer '+getToken()},
       data: employeeObject
     }).then(response => {
-
+      
     }).catch((err) => {
       console.log(err)
     });
@@ -200,8 +204,8 @@ class TableEmployee extends React.Component {
         />
       ) : (
           text
-        ),
-
+        ),      
+   
   });
 
   handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -230,7 +234,7 @@ class TableEmployee extends React.Component {
         dataIndex: 'userId',
         key: 'userId',
         filteredValue: filteredInfo.userId || null,
-        sorter: (a, b) => a.userId - b.userId,
+        sorter: (a, b) =>  a.userId - b.userId,
         sortOrder: sortedInfo.columnKey === 'userId' && sortedInfo.order,
         ellipsis: true,
         ...this.getColumnSearchProps('userId'),
@@ -256,6 +260,26 @@ class TableEmployee extends React.Component {
         ...this.getColumnSearchProps('surname'),
       },
       {
+        title: 'JMBG',
+        dataIndex: 'jmbg',
+        key: 'jmbg',
+        filteredValue: filteredInfo.jmbg || null,
+        sorter: (a, b) =>  a.jmbg - b.jmbg,
+        sortOrder: sortedInfo.columnKey === 'jmbg' && sortedInfo.order,
+        ellipsis: true,
+        ...this.getColumnSearchProps('jmbg'),
+      },
+      {
+        title: 'Birthdate',
+        dataIndex: 'dateOfBirth',
+        key: 'dateOfBirth',
+        filteredValue: filteredInfo.userId || null,
+        sorter: (a, b) => moment(a.dateOfBirth,dateFormat).unix() - moment(b.dateOfBirth,dateFormat).unix(),
+        sortOrder: sortedInfo.columnKey === 'dateOfBirth' && sortedInfo.order,
+        ellipsis: true,
+        ...this.getColumnSearchProps('dateOfBirth'),
+      },
+      {
         title: 'Email',
         key: 'email',
         dataIndex: 'email',
@@ -276,7 +300,7 @@ class TableEmployee extends React.Component {
         ...this.getColumnSearchProps('address'),
       },
       {
-        title: 'Phone number',
+        title: 'Phone',
         dataIndex: 'phoneNumber',
         key: 'phoneNumber',
         filteredValue: filteredInfo.phoneNumber || null,
@@ -314,36 +338,29 @@ class TableEmployee extends React.Component {
           ) : null,
       },
       {
-        title: 'Cash registers overview',
-        dataIndex: 'Cash register overview',
-        render: (text, record) =>
-          2 >= 1 ? (
-            <Link to={`/dashboard/cash_register/${record.userId}`}> Overview</Link>
-          ) : null,
-      },
-      {
         title: 'Delete',
         dataIndex: 'delete',
-        render: (text, record) =>
-          2 >= 1 ? (
-
-            <button onClick={i => this.handleDeleteRow(record.userId)}>Delete</button>
-
-          ) : null,
+        render : (text, record) =>
+        2>=1 ? (
+          
+          <button onClick={i=>this.handleDeleteRow(record.userId)}>Delete</button>
+          
+        ) : null,
       }
     ];
     return (
-      <div>        
-        <Table columns={columns} dataSource={this.state.employees} onChange={this.handleChange} />      
-        <div id = "container" className="table-operations" style={{ marginTop: '-48px' }}>
+      <div>
+        <div className="table-operations">
           <Button onClick={this.clearAll}>Clear filters and sorters</Button>
           {" "}
           <Button onClick={this.generateReport}>Generate report</Button>
         </div>
+        <Table columns={columns} dataSource={this.state.employees} onChange={this.handleChange} />
       </div>
     );
   }
 }
 
 export default TableEmployee;
+
 
