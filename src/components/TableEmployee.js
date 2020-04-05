@@ -275,14 +275,6 @@ class TableEmployee extends React.Component {
           ) : null,
       },
       {
-        title: 'Cash registers',
-        dataIndex: 'Cash register overview',
-        render: (text, record) =>
-          2 >= 1 ? (
-            <Link to={`/dashboard/cash_register/${record.userId}`}> Overview</Link>
-          ) : null,
-      },
-      {
         title: 'Delete',
         dataIndex: 'delete',
         render : (text, record) =>
