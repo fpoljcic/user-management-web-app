@@ -27,7 +27,8 @@ class ManageEmployees extends React.Component {
         hireoffices: null,
         fireoffices: null,
         currentWorkerId: null,
-        currentRole: "false"
+        currentRole: "false",
+        managers: null
     }
 
     constructor(props) {
@@ -47,6 +48,7 @@ class ManageEmployees extends React.Component {
     componentWillMount() {
         this.getEmployees();
         this.getOffices();
+        this.getManagers();
     }
 
     componentDidUpdate(prevProps) {
@@ -83,6 +85,19 @@ class ManageEmployees extends React.Component {
             .catch(err => console.log(err));
     }
 
+    getManagers() {
+        axios.get('https://main-server-si.herokuapp.com/api/employees', { headers: { Authorization: 'Bearer ' + getToken() } })
+            .then(response => {
+                let niz = response.data.filter((entry) => {
+                    return entry.roles.some(item => item.rolename === "ROLE_OFFICEMAN");
+                })
+                this.setState({ managers: niz }, () => {
+                    console.log("managers", this.state.managers);
+                })
+            })
+            .catch(err => console.log(err));
+    }
+
     getOffices() {
 
         axios.get('https://main-server-si.herokuapp.com/api/business/offices', { headers: { Authorization: 'Bearer ' + getToken() } })
@@ -104,42 +119,68 @@ class ManageEmployees extends React.Component {
         return flag;
     }
 
+    isOffMan(userId) {
+        return this.state.managers.some(e => e.userId === userId);
+    }
+
     changeCurrentWorker(userId) {
 
+        if (this.isOffMan(userId)) {
+            console.log("provjera offman");
 
-        axios.get('https://main-server-si.herokuapp.com/api/business/employees/' + userId + '/office',
-            { headers: { Authorization: 'Bearer ' + getToken() } })
-            .then(response => {
+            // Office managera ne mozemo zaposliti,a li mozemo otpustiti
+            let niz = this.state.offices.filter(e => e.manager.id === userId);
+            this.setState({ hireoffices: null, fireoffices: niz, currentWorkerId: userId });
+        }
+        else {
 
-                let role
+            axios.get('https://main-server-si.herokuapp.com/api/business/employees/' + userId + '/office',
+                { headers: { Authorization: 'Bearer ' + getToken() } })
+                .then(response => {
 
-                let temp = this.state.employees.find(i => i.userId === userId);
-                let pom = temp.roles[0].id
+                    let role
 
-                if (pom === 7) role = "false";
-                else role = "true";
+                    let temp = this.state.employees.find(i => i.userId === userId);
+                    let pom = temp.roles[0].id
 
-
-                let filterTest = this.state.offices
-                let fired = response.data
-
-                console.log(fired);
-
-                let niz = filterTest.filter(e => this.hiredRadnici(e, response.data));
-
-
-                console.log("hire", niz, response.data);
-
-                this.setState({ fireoffices: response.data, hireoffices: niz, currentWorkerId: userId, currentRole: role })
-            })
-            .catch(err => {
+                    if (pom === 7) role = "false";
+                    else role = "true";
 
 
-                invalid()
-                this.setState({ hireoffices: null, fireoffices: null })
+                    let filterTest = this.state.offices
+                    let fired = response.data
 
-            }
-            );
+                    console.log(fired);
+
+                    let niz = filterTest.filter(e => this.hiredRadnici(e, response.data));
+
+
+                    console.log("hire", niz, response.data);
+
+                    this.setState({ fireoffices: response.data, hireoffices: niz, currentWorkerId: userId, currentRole: role })
+                })
+                .catch(err => {
+                    if ("Employee with this id isn't hired at any office" === err.response.data.message) {
+
+                        let role
+
+                        let temp = this.state.employees.find(i => i.userId === userId);
+                        let pom = temp.roles[0].id
+    
+                        if (pom === 7) role = "false";
+                        else role = "true";
+
+                        this.setState({ hireoffices: this.state.offices, fireoffices: null, currentRole: role, currentWorkerId: userId })
+                    }
+                    else {
+
+                        invalid()
+                        this.setState({ hireoffices: null, fireoffices: null })
+                    }
+
+                }
+                );
+        }
 
     };
 
@@ -431,6 +472,3 @@ class ManageEmployees extends React.Component {
 }
 
 export default ManageEmployees;
-
-
-

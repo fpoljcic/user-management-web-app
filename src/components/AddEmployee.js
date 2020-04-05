@@ -1,14 +1,15 @@
 import React from 'react';
 import { Component } from 'react';
-import { Input, Col, Row, Modal, Form, Checkbox } from 'antd';
+import { Input, Col, Row, Modal, Form, Checkbox, Typography } from 'antd';
 import { Button, DatePicker } from 'antd';
 import axios from 'axios';
 import { getToken } from '../utilities/Common';
 import moment from 'moment';
 
+const { Title } = Typography;
+
 moment.locale('bs')
 
-const dateFormat = 'DD.MM.YYYY';
 const CheckboxGroup = Checkbox.Group;
 
 const plainOptions = ['User Manager', 'Warehouse Manager', 'Public Relations Worker', 'Cashier', 'Bartender'];
@@ -43,12 +44,6 @@ function invalid() {
         ),
         onOk() { },
     });
-}
-
-
-const roles = ['Admin', 'User Manager', 'Merchant', 'Warehouse Manager', 'Public Relations Worker', 'Cashier', 'Office Manager', 'Bartender'];
-function getRoleId(value) {
-
 }
 
 function giveRole(value) {
@@ -87,6 +82,7 @@ let boolCity = true;
 let boolJMBG = true;
 let boolDate = true;
 
+// eslint-disable-next-line
 const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 const validateForm = (errors) => {
 
@@ -204,7 +200,7 @@ class AddEmployee extends Component {
                 break;
             case 'jmbg':
                 errors.jmbg =
-                    value.length != 13 || boolJMBG || !value.match(/^[0-9]*$/)
+                    value.length !== 13 || boolJMBG || !value.match(/^[0-9]*$/)
                         ? 'JMBG must contain 13 numbers!'
                         : '';
 
@@ -230,7 +226,7 @@ class AddEmployee extends Component {
         values.preventDefault();
 
 
-        if (validateForm(this.state.errors) &&  checkList.length !== 0) {
+        if (validateForm(this.state.errors) && checkList.length !== 0) {
 
             console.log(data);
 
@@ -282,8 +278,8 @@ class AddEmployee extends Component {
 
         return (
             <div className="site-layout-content">
-
-                <div className="site-input-group-wrapper" style={{ marginTop: '2%' }}>
+                <Title style={{ fontFamily: 'Roboto-Thin' }} level={3}>Add a new employee</Title>
+                <div className="site-input-group-wrapper" >
                     <Form handleSubmit={this.handleSubmit}>
                         <Input.Group size="large">
                             <Row gutter={10}>
@@ -484,7 +480,6 @@ class MyCheckBox extends React.Component {
         return (
             <div>
                 <div className="site-checkbox-all-wrapper" style={{ width: '50%' }}>
-                 
                 </div>
                 <br />
                 <CheckboxGroup
