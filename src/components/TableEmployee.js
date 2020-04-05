@@ -57,15 +57,45 @@ class TableEmployee extends React.Component {
   };
 
   generateReport = () => { 
-    this.getEmployees();   
-    this.state = {
-      //ovo people bi trebali biti podaci iz tabele, a ne iz baze :(
-      people: this.state.employees
-    };
+    let filtered = [];
+    for (var key in this.state.filteredInfo) {
+      if (this.state.filteredInfo.hasOwnProperty(key) && this.state.filteredInfo[key] != null) {
+        filtered.push({
+          key: key,
+          value: this.state.filteredInfo[key][0]
+        });
+      }
+    }
 
+    // filtriranje
+    let newEmployees = this.state.employees.filter((emp) => {
+      for (let element of filtered) {
+        if (emp[element.key] !== element.value) {
+          return false;
+        }
+      }
+      return true;
+    });
+
+    // sortiranje
+    if(this.state.sortedInfo !== null) {
+      if (this.state.sortedInfo.order) {
+        key = this.state.sortedInfo.columnKey
+        let order = this.state.sortedInfo.order === "ascend" ? 1 : -1;
+        newEmployees.sort((emp1, emp2) => {
+          if (key === "userId")
+            return (emp1[key] - emp2[key]) * order;
+          return emp1[key].localeCompare(emp2[key]) * order;
+        });
+      }
+    }
+
+    // zaposleni sa tabele
+    console.log(newEmployees);
+       
     const unit = "pt";
-    const size = "A4"; // Use A1, A2, A3 or A4
-    const orientation = "portrait"; // portrait or landscape
+    const size = "A4"; 
+    const orientation = "portrait"; 
 
     const marginLeft = 40;
     const doc = new jsPDF(orientation, unit, size);
@@ -75,22 +105,20 @@ class TableEmployee extends React.Component {
     const title = "Employee report";
     const headers = [["Name", "Surname", "Email", "Address", "Phone number", "Country", "City"]];
 
-    const data = this.state.people.map(elt => [elt.name, elt.surname, elt.email, elt.address, elt.phoneNumber, elt.country, elt.city]);
-
+    const data = newEmployees.map(elt => [elt.name, elt.surname, elt.email, elt.address, elt.phoneNumber, elt.country, elt.city]);
     let content = {
       startY: 50,
       head: headers,
       body: data
     };
-
     
     doc.text(title, marginLeft, 40);
     doc.autoTable(content);
-    //doc.save("report.pdf")
     doc.setProperties({
       title: "user_management_web_app_report"
     });
     doc.output('dataurlnewwindow');
+    doc.save('user_management_web_app_report');
   };
 
   handleDeleteRow(userId) {
@@ -305,8 +333,8 @@ class TableEmployee extends React.Component {
       }
     ];
     return (
-      <div>
-        <Table id = "table" columns={columns} dataSource={this.state.employees} onChange={this.handleChange} />
+      <div>        
+        <Table columns={columns} dataSource={this.state.employees} onChange={this.handleChange} />      
         <div id = "container" className="table-operations" style={{ marginTop: '-48px' }}>
           <Button onClick={this.clearAll}>Clear filters and sorters</Button>
           {" "}
