@@ -9,6 +9,8 @@ import Cashier from './Cashier';
 import Manager from './Manager';
 import AddEmployee from './AddEmployee';
 import UpdateEmployee from './UpdateEmployee';
+import ManageEmployees from './ManageEmployees';
+
 
 import MyHeader from './MyHeader';
 import MyFooter from './MyFooter';
@@ -27,6 +29,7 @@ function Dashboard(props) {
           <PrivateRoute path="/dashboard/cashiers" component={Cashier} />
           <PrivateRoute path="/dashboard/managers" component={Manager} />
           <PrivateRoute path="/dashboard/add_employee" component={AddEmployee} />
+          <PrivateRoute path="/dashboard/manage_employees" component={ManageEmployees} />
           <PrivateRoute path="/dashboard/update_employee/:id" component={UpdateEmployee} />
           <PrivateRoute path="/dashboard/cash_register/:id" component={TableCashRegister} />
           <PrivateRoute path="/dashboard/receipts/:id" component={TableReceipt} />
