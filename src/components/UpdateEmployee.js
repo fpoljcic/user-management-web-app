@@ -6,7 +6,7 @@ import axios from 'axios';
 import { getToken } from '../utilities/Common';
 const CheckboxGroup = Checkbox.Group;
 
-const plainOptions = ['User Manager', 'Warehouse Manager', 'Public Relations Worker', 'Cashier', 'Bartender', 'Customer Support'];
+var plainOptions = ['User Manager', 'Warehouse Manager', 'Public Relations Worker', 'Cashier', 'Bartender', 'Customer Support'];
 //bartender = 7, merchant = 3, manager = 2, warehouse = 4, pr = 5, cashier =   
 let podaci = [];
 
@@ -170,6 +170,17 @@ class UpdateEmployee extends Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
+    showHidePRCheckbox(checkedList) {
+        if (!checkedList.includes("Public Relations Worker")) {
+            const index = plainOptions.indexOf("Customer Support");
+            if (index > -1) {
+                plainOptions.splice(index, 1);
+            }
+        } else if (!plainOptions.includes("Customer Support")) {
+            plainOptions.push("Customer Support");
+        }
+    }
+
     componentWillMount() {
         this.getEmployeeDetails();
     }
@@ -197,6 +208,7 @@ class UpdateEmployee extends Component {
                     this.setState({
                         checkedList: podaci
                     })
+                    this.showHidePRCheckbox(podaci);
                 });
             })
             .catch(err => console.log(err));
@@ -346,6 +358,7 @@ class UpdateEmployee extends Component {
     }
 
     onChange = checkedList => {
+        this.showHidePRCheckbox(checkedList);
         this.setState({
             checkedList: checkedList,
             indeterminate: !!checkedList.length && checkedList.length < plainOptions.length,
