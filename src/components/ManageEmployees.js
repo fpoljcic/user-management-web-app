@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Table, Input, Button, Modal } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
@@ -27,7 +27,8 @@ class ManageEmployees extends React.Component {
         hireoffices: null,
         fireoffices: null,
         currentWorkerId: null,
-        currentRole: "false"
+        currentRole: "false",
+        managers: null
     }
 
     constructor(props) {
@@ -44,10 +45,10 @@ class ManageEmployees extends React.Component {
         this.changeCurrentWorker = this.changeCurrentWorker.bind(this);
     }
 
-    
     componentWillMount() {
         this.getEmployees();
         this.getOffices();
+        this.getManagers();
     }
 
     componentDidUpdate(prevProps) {
@@ -60,6 +61,8 @@ class ManageEmployees extends React.Component {
     odgovarajucaRola(e) {
 
         let flag = true;
+
+        if (e.roles.size === 0) return false;
         e.roles.forEach(element => {
 
             if (element.id < 6 || element.id > 8)
@@ -77,6 +80,19 @@ class ManageEmployees extends React.Component {
                 let niz = filterTest.filter(this.odgovarajucaRola);
 
                 this.setState({ employees: niz }, () => {
+                })
+            })
+            .catch(err => console.log(err));
+    }
+
+    getManagers() {
+        axios.get('https://main-server-si.herokuapp.com/api/employees', { headers: { Authorization: 'Bearer ' + getToken() } })
+            .then(response => {
+                let niz = response.data.filter((entry) => {
+                    return entry.roles.some(item => item.rolename === "ROLE_OFFICEMAN");
+                })
+                this.setState({ managers: niz }, () => {
+                    console.log("managers", this.state.managers);
                 })
             })
             .catch(err => console.log(err));
@@ -103,40 +119,55 @@ class ManageEmployees extends React.Component {
         return flag;
     }
 
+    isOffMan(userId) {
+        return this.state.managers.some(e => e.userId === userId);
+    }
+
     changeCurrentWorker(userId) {
 
+        if (this.isOffMan(userId)) {
+            console.log("provjera offman");
 
-        axios.get('https://main-server-si.herokuapp.com/api/business/employees/' + userId + '/office',
-            { headers: { Authorization: 'Bearer ' + getToken() } })
-            .then(response => {
+            // Office managera ne mozemo zaposliti,a li mozemo otpustiti
+            let niz = this.state.offices.filter(e => e.manager.id === userId);
+            this.setState({ hireoffices: null, fireoffices: niz});
+        }
+        else {
 
-                let role
+            axios.get('https://main-server-si.herokuapp.com/api/business/employees/' + userId + '/office',
+                { headers: { Authorization: 'Bearer ' + getToken() } })
+                .then(response => {
 
-                let temp = this.state.employees.find(i => i.userId === userId);
-                let pom = temp.roles[0].id
+                    let role
 
-                if (pom === 7) role = "false";
-                else role = "true";
+                    let temp = this.state.employees.find(i => i.userId === userId);
+                    let pom = temp.roles[0].id
 
-
-                let filterTest = this.state.offices
-                let fired = response.data
-
-                console.log(fired);
-
-                let niz = filterTest.filter(e => this.hiredRadnici(e, response.data));
+                    if (pom === 7) role = "false";
+                    else role = "true";
 
 
-                console.log("hire", niz, response.data);
+                    let filterTest = this.state.offices
+                    let fired = response.data
 
-                this.setState({ fireoffices: response.data, hireoffices: niz, currentWorkerId: userId, currentRole: role })
-            })
-            .catch(err => {
+                    console.log(fired);
 
-                invalid();
-                this.setState({ hireoffices: null, fireoffices: null })
-            }
-            );
+                    let niz = filterTest.filter(e => this.hiredRadnici(e, response.data));
+
+
+                    console.log("hire", niz, response.data);
+
+                    this.setState({ fireoffices: response.data, hireoffices: niz, currentWorkerId: userId, currentRole: role })
+                })
+                .catch(err => {
+
+
+                    invalid()
+                    this.setState({ hireoffices: null, fireoffices: null })
+
+                }
+                );
+        }
 
     };
 
@@ -161,6 +192,28 @@ class ManageEmployees extends React.Component {
             }, (error) => {
 
             });
+
+    };
+
+    fireWorker(office) {
+
+        axios.request({
+            method: 'delete',
+            url: 'https://main-server-si.herokuapp.com/api/business/employees',
+            headers: { Authorization: 'Bearer ' + getToken() },
+            data: {
+                officeId: office,
+                employeeId: this.state.currentWorkerId
+            }
+
+        }).then(response => {
+
+
+            this.changeCurrentWorker(this.state.currentWorkerId);
+
+        }).catch((err) => {
+            console.log(err)
+        })
 
     };
 
@@ -349,7 +402,37 @@ class ManageEmployees extends React.Component {
             }
         ];
 
-     
+        const columns3 = [
+            {
+                title: 'ID',
+                dataIndex: 'id',
+                key: 'id',
+                width: '10%',
+                ...this.getColumnSearchProps2('ID'),
+            },
+            {
+                title: 'Address',
+                dataIndex: 'address',
+                key: 'address',
+                width: '20%',
+                ...this.getColumnSearchProps2('address'),
+            },
+            {
+                title: 'City',
+                dataIndex: 'city',
+                width: '20%',
+                key: 'surname',
+                ...this.getColumnSearchProps2('city'),
+            },
+            {
+                title: 'Fire',
+                dataIndex: 'offices',
+                render: (text, record) =>
+                    2 >= 1 ? (
+                        <Button type="primary" onClick={i => this.fireWorker(record.id)} > Fire </Button>
+                    ) : null,
+            }
+        ];
 
         return (
             <div>
@@ -360,11 +443,14 @@ class ManageEmployees extends React.Component {
                     </div>
                     <br />
 
-                    <div style={{ width: '50%', margin: '0 auto' }}>
+                    <div style={{ width: '44%', float: "left" }}>
                         <h1 style={{ textAlign: "center" }}> Available workplaces</h1>
                         <Table size="small" columns={columns2} dataSource={this.state.hireoffices} />
                     </div>
-                 
+                    <div style={{ width: '44%', float: "right" }}>
+                        <h1 style={{ textAlign: "center" }}> Current workplaces </h1>
+                        <Table size="small" columns={columns3} dataSource={this.state.fireoffices} />
+                    </div>
                 </div>
 
             </div >
