@@ -1,15 +1,13 @@
 import React from 'react';
 import { Component } from 'react';
-import { Input, Col, Row, Form, Select, InputNumber, DatePicker, AutoComplete, Cascader, Modal, Checkbox } from 'antd';
+import { Input, Col, Row, Form, Modal, Checkbox } from 'antd';
 import { Button } from 'antd';
 import axios from 'axios';
-import PublicRoute from '../utilities/PublicRoute';
 import { getToken } from '../utilities/Common';
 const CheckboxGroup = Checkbox.Group;
-  
+
 const plainOptions = ['User Manager', 'Warehouse Manager', 'Public Relations Worker', 'Cashier', 'Bartender', 'Customer Support'];
 //bartender = 7, merchant = 3, manager = 2, warehouse = 4, pr = 5, cashier =   
-let data = [];
 let podaci = [];
 
 function giveCheckboxValue(value) {
@@ -20,19 +18,19 @@ function giveCheckboxValue(value) {
 
         case "ROLE_PRW":
             return 'Public Relations Worker';
-            
+
         case "ROLE_PRP":
-            return 'Customer Support';       
-        
+            return 'Customer Support';
+
         case "ROLE_MANAGER":
             return 'User Manager';
-            
+
         case "ROLE_CASHIER":
             return 'Cashier';
-            
+
         case "ROLE_BARTENDER":
             return 'Bartender';
-            
+
         default:
             return "";
     }
@@ -49,7 +47,7 @@ function giveRole(value) {
             return "ROLE_PRW";
 
         case 'Customer Support':
-            return "ROLE_PRP";                
+            return "ROLE_PRP";
 
         case 'User Manager':
             return "ROLE_MANAGER";
@@ -126,34 +124,34 @@ function info() {
     });
 }
 
-
+// eslint-disable-next-line
 const validPhoneNumber = RegExp(/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/g);
 const validateForm = (errors) => {
     let valid = true;
     Object.values(errors).forEach(
-      (val) => val.length > 0 && (valid = false)
+        (val) => val.length > 0 && (valid = false)
     );
     return valid;
-  }
-  
- 
+}
+
+
 class UpdateEmployee extends Component {
     state = {
-        checkedList:[]
+        checkedList: []
     }
     constructor(props) {
         super(props);
         this.state = {
             name: '',
-            surname: '', 
+            surname: '',
             address: '',
             city: '',
             country: '',
             phoneNumber: '',
-            roles:[],
+            roles: [],
             jmbg: '',
             dateOfBirth: '',
-            checkedList:[],
+            checkedList: [],
             indeterminate: true,
             checkAll: false,
             errors: {
@@ -162,79 +160,77 @@ class UpdateEmployee extends Component {
                 surname: '',
                 email: '',
                 password: '',
-                username: '',
                 address: '',
                 country: '',
                 city: '',
                 phoneNumber: ''
             }
         };
- 
+
         this.handleChange = this.handleChange.bind(this);
     }
- 
-    componentWillMount(){
+
+    componentWillMount() {
         this.getEmployeeDetails();
-      }
+    }
 
-      getEmployeeDetails(){
+    getEmployeeDetails() {
         let employee = this.props.match.params.id;
-        axios.get(`https://main-server-si.herokuapp.com/api/users/${employee}`, { headers: { Authorization: 'Bearer '+getToken()}})
-        .then(response => {
-          this.setState({
-            name: response.data.name,
-            surname: response.data.surname, 
-            address: response.data.address,
-            city: response.data.city,
-            country: response.data.country,
-            phoneNumber: response.data.phoneNumber,
-            roles: response.data.roles,
-            jmbg: response.data.jmbg,
-            dateOfBirth: response.data.dateOfBirth,
-            checkedList: []
-          }, (res) => {
-            console.log(response.data);
-            for (let i = 0 ; i < this.state.roles.length; i++)
-            {
-                podaci.push(giveCheckboxValue(this.state.roles[i].rolename));
-            }
-            this.setState({
-                checkedList: podaci
+        axios.get(`https://main-server-si.herokuapp.com/api/users/${employee}`, { headers: { Authorization: 'Bearer ' + getToken() } })
+            .then(response => {
+                this.setState({
+                    name: response.data.name,
+                    surname: response.data.surname,
+                    address: response.data.address,
+                    city: response.data.city,
+                    country: response.data.country,
+                    phoneNumber: response.data.phoneNumber,
+                    roles: response.data.roles,
+                    jmbg: response.data.jmbg,
+                    dateOfBirth: response.data.dateOfBirth,
+                    checkedList: []
+                }, () => {
+                    console.log(response.data);
+                    for (let i = 0; i < this.state.roles.length; i++) {
+                        podaci.push(giveCheckboxValue(this.state.roles[i].rolename));
+                    }
+                    this.setState({
+                        checkedList: podaci
+                    })
+                });
             })
-          });
-        })
-        .catch(err => console.log(err));
-        }
-    
-        editEmployee(newMeetup){
-            let employee = this.props.match.params.id;
-            axios.request({
-              method:'put',
-              url:`https://main-server-si.herokuapp.com/api/users/${employee}`,
-              headers: { Authorization: 'Bearer '+getToken()},
-              data: newMeetup
-            }).then(response => {
-              this.props.history.push('/dashboard/home');
-            }).catch(err => invalid1());
-          }
+            .catch(err => console.log(err));
+    }
 
-        changeRoles(newRoles) {
-            let employee = this.props.match.params.id;
-            axios.request({
-              method:'put',
-              url:`https://main-server-si.herokuapp.com/api/users/roles/${employee}`,
-              headers: { Authorization: 'Bearer '+getToken()},
-              data: newRoles
-            }).then(response => {
-              info()
-              this.props.history.push('/dashboard/home');
-              window.location.reload();
-            }).catch(err => invalid2());
-        }  
+    editEmployee(newMeetup) {
+        let employee = this.props.match.params.id;
+        axios.request({
+            method: 'put',
+            url: `https://main-server-si.herokuapp.com/api/users/${employee}`,
+            headers: { Authorization: 'Bearer ' + getToken() },
+            data: newMeetup
+        }).then(() => {
+            this.props.history.push('/dashboard/home');
+        }).catch(() => invalid1());
+    }
+
+    changeRoles(newRoles) {
+        let employee = this.props.match.params.id;
+        axios.request({
+            method: 'put',
+            url: `https://main-server-si.herokuapp.com/api/users/roles/${employee}`,
+            headers: { Authorization: 'Bearer ' + getToken() },
+            data: newRoles
+        }).then(() => {
+            info()
+            this.props.history.push('/dashboard/home');
+            window.location.reload();
+        }).catch(() => invalid2());
+    }
 
 
     handleChange = (event) => {
- 
+
         event.preventDefault();
         const { name, value } = event.target;
         let errors = this.state.errors;
@@ -281,23 +277,21 @@ class UpdateEmployee extends Component {
             default:
                 break;
         }
- 
+
         this.setState({ errors, [name]: value });
     }
- 
+
     handleSubmit = (event) => {
-        if (this.state.checkedList.length === 0)
-        {
+        if (this.state.checkedList.length === 0) {
             invalid();
         }
-        else
-        {
+        else {
             event.preventDefault();
             if (validateForm(this.state.errors)) {
-                let zaposlenik = 
+                let zaposlenik =
                 {
                     name: this.state.name,
-                    surname: this.state.surname, 
+                    surname: this.state.surname,
                     address: this.state.address,
                     city: this.state.city,
                     country: this.state.country,
@@ -307,60 +301,51 @@ class UpdateEmployee extends Component {
                     dateOfBirth: this.state.dateOfBirth
                 }
                 this.editEmployee(zaposlenik)
-            
+
                 let pomocna = [];
                 let postoji = false;
-                for (let j = 0; j < this.state.checkedList.length; j++)
-                {
-                if(j===0)
-                pomocna.push({rolename: giveRole(this.state.checkedList[j])});
-                
-                    
-                    else
-                    {
-                        for (let l = 0; l < pomocna.length; l++)
-                        {
-                            if (pomocna[l].rolename === (giveRole(this.state.checkedList[j])))
-                                {
-                                    postoji = true;
-                                }
+                for (let j = 0; j < this.state.checkedList.length; j++) {
+                    if (j === 0)
+                        pomocna.push({ rolename: giveRole(this.state.checkedList[j]) });
+
+
+                    else {
+                        for (let l = 0; l < pomocna.length; l++) {
+                            if (pomocna[l].rolename === (giveRole(this.state.checkedList[j]))) {
+                                postoji = true;
+                            }
                         }
-                        if (postoji == false)
-                        {
-                            pomocna.push({rolename: giveRole(this.state.checkedList[j])});
+                        if (postoji === false) {
+                            pomocna.push({ rolename: giveRole(this.state.checkedList[j]) });
                         }
-                        else 
-                        {
+                        else {
                             postoji = false;
                             continue;
                         }
-                    } 
+                    }
                 }
-                if(this.state.checkedList.includes("Customer Support") && !this.state.checkedList.includes("Public Relations Worker")) {
+                if (this.state.checkedList.includes("Customer Support") && !this.state.checkedList.includes("Public Relations Worker")) {
                     invalidPR();
                     window.location.reload();
                 } else {
-                    this.changeRoles({newRoles: pomocna});
-                    this.state.checkedList = []
+                    this.changeRoles({ newRoles: pomocna });
                     this.setState({
                         checkedList: []
                     })
-                }             
+                }
             }
-            else 
-            {
+            else {
                 invalid();
             }
         }
     }
-    
-    handleCancel = (event) => {
+
+    handleCancel = () => {
         this.props.history.push('/dashboard/home');
         window.location.reload();
     }
-      
-    onChange = checkedList => {
 
+    onChange = checkedList => {
         this.setState({
             checkedList: checkedList,
             indeterminate: !!checkedList.length && checkedList.length < plainOptions.length,
@@ -371,7 +356,6 @@ class UpdateEmployee extends Component {
         checkedList.forEach((index) => {
             list.push({ "rolename": giveRole(index) });
         });
-        data = list;
     };
 
     onCheckAllChange = e => {
@@ -387,121 +371,119 @@ class UpdateEmployee extends Component {
         temp.forEach((index) => {
             list.push({ "rolename": giveRole(index) });
         });
-        data = list;
     };
- 
+
     render() {
         const { errors } = this.state;
         return (
             <div className="site-layout-content">
-                
-                <Form onSubmit={this.handleSubmit} noValidate> 
-                <div className="site-input-group-wrapper" style={{ marginTop: '2%' }}>
- 
-                    <Input.Group size="large">
-                        <Row gutter={10}>
-                            <Col span={7}>
-                                <Input name="name" placeholder="Name" value = {this.state.name} onChange={this.handleChange} />
-                                <div className='info' ></div>
-                                {errors.name.length > 0 &&
-                                    <span className='error' style={{color: 'red'}} >{errors.name}</span>}
-                            </Col>
-                            <Col span={7}>
-                                <Input name="surname" placeholder="Surname" value = {this.state.surname} onChange={this.handleChange} />
-                                <div className='info'></div>
-                                {errors.surname.length > 0 &&
-                                    <span className='error' style={{color: 'red'}} >{errors.surname}</span>}
-                            </Col>
-                        </Row>
-                    </Input.Group>
-                    <br />
- 
-                    
-                    <br />
-                    <br />
-                    <br />
- 
-                    <Input.Group size="large">
-                        <Row gutter={10}>
-                            <Col span={7}>
-                                <Input name="phoneNumber" placeholder="Phone number" value = {this.state.phoneNumber} onChange={this.handleChange} />
-                                {errors.phoneNumber.length > 0 &&
-                                    <span className='error' style={{color: 'red'}}>{errors.phoneNumber}</span>}
-                                <div className='info'>
-                                </div>
-                            </Col>
-                            <Col span={7}>
-                                <Input name="address" placeholder="Address" value = {this.state.address} onChange={this.handleChange} />
-                                {errors.address.length > 0 &&
-                                    <span className='error' style={{color: 'red'}}>{errors.address}</span>}
-                                <div className='info'>
-                                </div>
-                            </Col>
-                        </Row>
-                    </Input.Group>
-                    <br />
-                    <br />
-                    <br />
- 
-                    <Input.Group size="large">
-                        <Row gutter={10}>
-                            <Col span={7}>
-                                <Input name="city" placeholder="City" value = {this.state.city} onChange={this.handleChange} />
-                                {errors.city.length > 0 &&
-                                    <span className='error' style={{color: 'red'}}>{errors.city}</span>}
-                                <div className='info'>
-                                </div>
- 
-                            </Col>
-                            <Col span={7}>
-                                <Input name="country" placeholder="Country" value = {this.state.country} onChange={this.handleChange} />
-                                {errors.country.length > 0 &&
-                                    <span className='error' style={{color: 'red'}}>{errors.country}</span>}
-                                <div className='info' >
-                                </div>
-                            </Col>
-                        </Row>
-                    </Input.Group>
- 
-                    <br />
-                    <br />
-                    <div>
-                  
-                <div className="site-checkbox-all-wrapper" style={{ width: '50%' }}>
 
-                    <Checkbox
+                <Form onSubmit={this.handleSubmit} noValidate>
+                    <div className="site-input-group-wrapper" style={{ marginTop: '2%' }}>
 
-                        indeterminate={this.state.indeterminate}
-                        onChange={this.onCheckAllChange}
-                        checked={this.state.checkAll}
-                    >
-                        Check all
+                        <Input.Group size="large">
+                            <Row gutter={10}>
+                                <Col span={7}>
+                                    <Input name="name" placeholder="Name" value={this.state.name} onChange={this.handleChange} />
+                                    <div className='info' ></div>
+                                    {errors.name.length > 0 &&
+                                        <span className='error' style={{ color: 'red' }} >{errors.name}</span>}
+                                </Col>
+                                <Col span={7}>
+                                    <Input name="surname" placeholder="Surname" value={this.state.surname} onChange={this.handleChange} />
+                                    <div className='info'></div>
+                                    {errors.surname.length > 0 &&
+                                        <span className='error' style={{ color: 'red' }} >{errors.surname}</span>}
+                                </Col>
+                            </Row>
+                        </Input.Group>
+                        <br />
+
+
+                        <br />
+                        <br />
+                        <br />
+
+                        <Input.Group size="large">
+                            <Row gutter={10}>
+                                <Col span={7}>
+                                    <Input name="phoneNumber" placeholder="Phone number" value={this.state.phoneNumber} onChange={this.handleChange} />
+                                    {errors.phoneNumber.length > 0 &&
+                                        <span className='error' style={{ color: 'red' }}>{errors.phoneNumber}</span>}
+                                    <div className='info'>
+                                    </div>
+                                </Col>
+                                <Col span={7}>
+                                    <Input name="address" placeholder="Address" value={this.state.address} onChange={this.handleChange} />
+                                    {errors.address.length > 0 &&
+                                        <span className='error' style={{ color: 'red' }}>{errors.address}</span>}
+                                    <div className='info'>
+                                    </div>
+                                </Col>
+                            </Row>
+                        </Input.Group>
+                        <br />
+                        <br />
+                        <br />
+
+                        <Input.Group size="large">
+                            <Row gutter={10}>
+                                <Col span={7}>
+                                    <Input name="city" placeholder="City" value={this.state.city} onChange={this.handleChange} />
+                                    {errors.city.length > 0 &&
+                                        <span className='error' style={{ color: 'red' }}>{errors.city}</span>}
+                                    <div className='info'>
+                                    </div>
+
+                                </Col>
+                                <Col span={7}>
+                                    <Input name="country" placeholder="Country" value={this.state.country} onChange={this.handleChange} />
+                                    {errors.country.length > 0 &&
+                                        <span className='error' style={{ color: 'red' }}>{errors.country}</span>}
+                                    <div className='info' >
+                                    </div>
+                                </Col>
+                            </Row>
+                        </Input.Group>
+
+                        <br />
+                        <br />
+                        <div>
+
+                            <div className="site-checkbox-all-wrapper" style={{ width: '50%' }}>
+
+                                <Checkbox
+
+                                    indeterminate={this.state.indeterminate}
+                                    onChange={this.onCheckAllChange}
+                                    checked={this.state.checkAll}
+                                >
+                                    Check all
           </Checkbox>
 
-                </div>
-                <br />
-                <CheckboxGroup
-                    options={plainOptions}
-                    value={this.state.checkedList}
-                    onChange={this.onChange}
-                />
-            </div>
-                 
-                    <br />
-                    <br />             
- 
-                    <div style={{ marginTop: '%' }}>
-                        <Button type="primary" style={{ width: '56%' }} onClick={this.handleSubmit} > Submit</Button>
+                            </div>
+                            <br />
+                            <CheckboxGroup
+                                options={plainOptions}
+                                value={this.state.checkedList}
+                                onChange={this.onChange}
+                            />
+                        </div>
+
                         <br />
-                        <br /> 
-                        <Button type="primary" style={{ width: '56%' }} onClick={this.handleCancel} > Cancel editing</Button>
+                        <br />
+
+                        <div style={{ marginTop: '%' }}>
+                            <Button type="primary" style={{ width: '56%' }} onClick={this.handleSubmit} > Submit</Button>
+                            <br />
+                            <br />
+                            <Button type="primary" style={{ width: '56%' }} onClick={this.handleCancel} > Cancel editing</Button>
+                        </div>
                     </div>
-                </div>
                 </Form>
             </div>
         );
     }
 }
- 
+
 export default UpdateEmployee;
- 

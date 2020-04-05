@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Input, Button, Popconfirm } from 'antd';
+import { Table, Input, Button } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -63,7 +63,7 @@ class TableEmployee extends React.Component {
     let i;
     let rows = [...this.state.employees]
     for (i = 0; i < rows.length; i++)
-      if (rows[i].userId == userId) break;
+      if (rows[i].userId === userId) break;
 
     if (window.confirm('Delete the item?')) {
       this.deleteEmployee(userId, rows[i]);

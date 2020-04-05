@@ -8,7 +8,7 @@ function Manager(props) {
     return (
         <div>
             <div className="site-layout-content">
-                <Title level={3}>Here is a list of all managers!</Title>
+                <Title style={{ fontFamily: 'Roboto-Thin' }} level={3}>List of all managers</Title>
             </div>
             <TableManager />
         </div>
