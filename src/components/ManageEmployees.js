@@ -130,7 +130,7 @@ class ManageEmployees extends React.Component {
 
             // Office managera ne mozemo zaposliti,a li mozemo otpustiti
             let niz = this.state.offices.filter(e => e.manager.id === userId);
-            this.setState({ hireoffices: null, fireoffices: niz});
+            this.setState({ hireoffices: null, fireoffices: niz, currentWorkerId: userId });
         }
         else {
 
@@ -160,10 +160,23 @@ class ManageEmployees extends React.Component {
                     this.setState({ fireoffices: response.data, hireoffices: niz, currentWorkerId: userId, currentRole: role })
                 })
                 .catch(err => {
+                    if ("Employee with this id isn't hired at any office" === err.response.data.message) {
 
+                        let role
 
-                    invalid()
-                    this.setState({ hireoffices: null, fireoffices: null })
+                        let temp = this.state.employees.find(i => i.userId === userId);
+                        let pom = temp.roles[0].id
+    
+                        if (pom === 7) role = "false";
+                        else role = "true";
+
+                        this.setState({ hireoffices: this.state.offices, fireoffices: null, currentRole: role, currentWorkerId: userId })
+                    }
+                    else {
+
+                        invalid()
+                        this.setState({ hireoffices: null, fireoffices: null })
+                    }
 
                 }
                 );
