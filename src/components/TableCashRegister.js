@@ -50,7 +50,6 @@ export default class CashRegistersOverview extends Component {
     const employee = this.props.match.params.id;
     axios.get(`https://main-server-si.herokuapp.com/api/business/employees/${employee}/office`, { headers: { Authorization: 'Bearer ' + getToken() } })
       .then(response => {
-        console.log("PODACI:" + JSON.stringify(response.data));
         this.setState({
           office: response.data[0],
           officeId: response.data[0].id,

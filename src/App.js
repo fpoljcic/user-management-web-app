@@ -20,6 +20,7 @@ function App() {
         <PrivateRoute path="/dashboard/update_employee/:id" component={Dashboard} />
         <PrivateRoute path="/dashboard/cash_register/:id" component={Dashboard} />
         <PrivateRoute path="/dashboard/receipts/:id" component={Dashboard} />
+        <PrivateRoute path="/dashboard/employment_history/:id" component={Dashboard} />
       </Switch>
     </Router>
   );
