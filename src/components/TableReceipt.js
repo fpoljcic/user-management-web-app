@@ -77,10 +77,8 @@ export default class ReceiptsOverview extends Component {
     getEmployeeNameFromId() {
         // Make a request for an employee name and username with a given ID
         const id = this.props.match.params.id;
-        console.log(id);
         axios.get(`https://main-server-si.herokuapp.com/api/users/${id}/username`, { headers: { Authorization: 'Bearer ' + getToken() } })
             .then(response => {
-                console.log(response);
                 this.setState({
                     employeeFullName: `${response.data.name} ${response.data.surname}`,
                     username: response.data.username
@@ -105,7 +103,6 @@ export default class ReceiptsOverview extends Component {
             });
         }
 
-        console.log(data);
 
         return (
             <div style={{ height: '79vh' }}>

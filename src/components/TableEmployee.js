@@ -45,7 +45,6 @@ class TableEmployee extends React.Component {
       filteredInfo: filters,
       sortedInfo: sorter,
     });
-    console.log("lol", this.state);
   };
 
   clearFilters = () => {
@@ -331,6 +330,12 @@ class TableEmployee extends React.Component {
         ...this.getColumnSearchProps('city')
       },
       {
+        title: 'Employment history',
+        render: (text, record) => (
+          <Link to={`/dashboard/employment_history/${record.userId}`}>Overview</Link>
+        )
+      },
+      {
         title: 'Edit',
         dataIndex: 'edit',
         render: (text, record) => (
@@ -343,15 +348,7 @@ class TableEmployee extends React.Component {
         render: (text, record) => (
           <Button danger onClick={i => this.handleDeleteRow(record.userId)}>Delete</Button>
         )
-      },
-      {
-        title: 'Employment history',
-        render: (text, record) =>
-          2 >= 1 ? (
-            <Link to={`/dashboard/employment_history/${record.userId}`}>Overview</Link>
-          ): null,
       }
-
     ];
     return (
       <div>
