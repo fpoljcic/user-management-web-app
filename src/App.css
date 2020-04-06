@@ -1,9 +1,9 @@
 @import '~antd/dist/antd.css';
 
 .content, body {
-  background-image: url("/background.jpg");
+  background-image: linear-gradient(rgb(248,242,242), rgb(198,208,218));
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: cover;  
 }
 
 .content {
@@ -39,4 +39,24 @@
   } to {
       transform: scale(1,1);
   }
+}
+
+.login-form-button {
+  width: 70%;
+  border-radius: 20px;
+  margin-left: 15%;
+}
+
+.login-graphics {
+  background-size: 20px 30px;
+}
+
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  padding-top: 8%; 
+  width: 420px;
+  height: 75vh;  
 }
