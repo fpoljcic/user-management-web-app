@@ -15,7 +15,8 @@ import ManageEmployees from './ManageEmployees';
 import MyHeader from './MyHeader';
 import MyFooter from './MyFooter';
 import TableCashRegister from './TableCashRegister';
-import TableReceipt from './TableReceipt'
+import TableReceipt from './TableReceipt';
+import TableEmploymentHistory from './TableEmploymentHistory';
 
 const { Content } = Layout;
 
@@ -33,6 +34,7 @@ function Dashboard(props) {
           <PrivateRoute path="/dashboard/update_employee/:id" component={UpdateEmployee} />
           <PrivateRoute path="/dashboard/cash_register/:id" component={TableCashRegister} />
           <PrivateRoute path="/dashboard/receipts/:id" component={TableReceipt} />
+          <PrivateRoute path="/dashboard/employment_history/:id" component={TableEmploymentHistory}/>
         </Content>
         <MyFooter />
       </Layout>

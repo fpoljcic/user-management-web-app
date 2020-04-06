@@ -343,7 +343,15 @@ class TableEmployee extends React.Component {
         render: (text, record) => (
           <Button danger onClick={i => this.handleDeleteRow(record.userId)}>Delete</Button>
         )
+      },
+      {
+        title: 'Employment history',
+        render: (text, record) =>
+          2 >= 1 ? (
+            <Link to={`/dashboard/employment_history/${record.userId}`}>Overview</Link>
+          ): null,
       }
+
     ];
     return (
       <div>
