@@ -1,7 +1,62 @@
 @import '~antd/dist/antd.css';
 
-.content {
-  background-image: url("/background.jpg");
+.content, body {
+  background-image: linear-gradient(rgb(248,242,242), rgb(198,208,218));
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: cover;  
+}
+
+.content {
+  min-height: calc(100vh - 119px);
+}
+
+.footerStyle {
+  color: rgb(161, 161, 161);
+  background-color: rgb(000,021,041);
+  text-align: center;
+
+  
+  bottom: 0px;
+  font-family: Roboto-Regular;
+}
+
+.headerStyle {
+  font-family: Roboto-Regular;
+  box-shadow: 2px 0px;
+}
+
+.animatedLine {
+  width: 400px;
+  height: 1px;
+  background: rgb(024,144,255);
+  margin: auto;
+  animation: wiggleLine 2s forwards;	
+}
+
+@keyframes wiggleLine {
+  from {
+      transform: scale(.1,.1);
+  } to {
+      transform: scale(1,1);
+  }
+}
+
+.login-form-button {
+  width: 70%;
+  border-radius: 20px;
+  margin-left: 15%;
+}
+
+.login-graphics {
+  background-size: 20px 30px;
+}
+
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  padding-top: 8%; 
+  width: 420px;
+  height: 75vh;  
 }

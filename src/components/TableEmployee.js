@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Input, Button, Popconfirm } from 'antd';
+import { Table, Input, Button } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -7,6 +7,11 @@ import { getToken } from '../utilities/Common';
 
 import Highlighter from 'react-highlight-words';
 
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import moment from 'moment'
+
+const dateFormat = 'DD.MM.YYYY';
 
 class TableEmployee extends React.Component {
   constructor() {
@@ -23,8 +28,6 @@ class TableEmployee extends React.Component {
   componentWillMount() {
     this.getEmployees();
   }
-
-
 
   getEmployees() {
     axios.get('https://main-server-si.herokuapp.com/api/employees', { headers: { Authorization: 'Bearer ' + getToken() } })
@@ -53,35 +56,101 @@ class TableEmployee extends React.Component {
     this.setState({
       filteredInfo: null,
       sortedInfo: null,
-      searchText: '' 
+      searchText: ''
     });
+  };
+
+
+  generateReport = () => { 
+    let filtered = [];
+    for (var key in this.state.filteredInfo) {
+      if (this.state.filteredInfo.hasOwnProperty(key) && this.state.filteredInfo[key] != null) {
+        filtered.push({
+          key: key,
+          value: this.state.filteredInfo[key][0]
+        });
+      }
+    }
+
+    // filtriranje
+    let newEmployees = this.state.employees.filter((emp) => {
+      for (let element of filtered) {
+        if (emp[element.key] !== element.value) {
+          return false;
+        }
+      }
+      return true;
+    });
+
+    // sortiranje
+    if(this.state.sortedInfo !== null) {
+      if (this.state.sortedInfo.order) {
+        key = this.state.sortedInfo.columnKey
+        let order = this.state.sortedInfo.order === "ascend" ? 1 : -1;
+        newEmployees.sort((emp1, emp2) => {
+          if (key === "userId")
+            return (emp1[key] - emp2[key]) * order;
+          return emp1[key].localeCompare(emp2[key]) * order;
+        });
+      }
+    }
+
+    // zaposleni sa tabele
+    console.log(newEmployees);
+       
+    const unit = "pt";
+    const size = "A4"; 
+    const orientation = "portrait"; 
+
+    const marginLeft = 40;
+    const doc = new jsPDF(orientation, unit, size);
+
+    doc.setFontSize(15);
+
+    const title = "Employee report";
+    const headers = [["Name", "Surname", "Email", "Address", "Phone number", "Country", "City"]];
+
+    const data = newEmployees.map(elt => [elt.name, elt.surname, elt.email, elt.address, elt.phoneNumber, elt.country, elt.city]);
+    let content = {
+      startY: 50,
+      head: headers,
+      body: data
+    };
+    
+    doc.text(title, marginLeft, 40);
+    doc.autoTable(content);
+    doc.setProperties({
+      title: "user_management_web_app_report"
+    });
+    doc.output('dataurlnewwindow');
+    doc.save('user_management_web_app_report');
   };
 
   handleDeleteRow(userId){
     let i;
     let rows = [...this.state.employees]
-    for(i=0; i<rows.length; i++)
-      if(rows[i].userId == userId) break;
-    
-    if(window.confirm('Delete the item?')){
+    for (i = 0; i < rows.length; i++)
+      if (rows[i].userId === userId) break;
+
+    if (window.confirm('Delete the item?')) {
       this.deleteEmployee(userId, rows[i]);
-      
-      rows.splice(i,1);
+
+      rows.splice(i, 1);
       this.setState({
         employees: rows
       });
     }
   };
-  
-  deleteEmployee(userId, employeeObject){
-    
+
+  deleteEmployee(userId, employeeObject) {
+
     axios.request({
-      method:'delete',
-      url:`https://main-server-si.herokuapp.com/api/employees/${userId}`,
-      headers: { Authorization: 'Bearer '+getToken()},
+      method: 'delete',
+      url: `https://main-server-si.herokuapp.com/api/employees/${userId}`,
+      headers: { Authorization: 'Bearer ' + getToken() },
       data: employeeObject
     }).then(response => {
-      
+
     }).catch((err) => {
       console.log(err)
     });
@@ -136,13 +205,11 @@ class TableEmployee extends React.Component {
         />
       ) : (
           text
-        ),      
-   
+        ),
+
   });
 
   handleSearch = (selectedKeys, confirm, dataIndex) => {
-
-    
     console.log(this.state);
     confirm();
     this.setState({
@@ -158,7 +225,6 @@ class TableEmployee extends React.Component {
 
 
   render() {
-    
     let sortedInfo = this.state.sortedInfo;
     let filteredInfo = this.state.filteredInfo;
     sortedInfo = sortedInfo || {};
@@ -169,10 +235,10 @@ class TableEmployee extends React.Component {
         dataIndex: 'userId',
         key: 'userId',
         filteredValue: filteredInfo.userId || null,
-        sorter: (a, b) =>  a.userId - b.userId,
+        sorter: (a, b) => a.userId - b.userId,
         sortOrder: sortedInfo.columnKey === 'userId' && sortedInfo.order,
         ellipsis: true,
-        ...this.getColumnSearchProps('userId'),
+        ...this.getColumnSearchProps('userId')
       },
       {
         title: 'Name',
@@ -182,7 +248,7 @@ class TableEmployee extends React.Component {
         sorter: (a, b) => { return a.name.localeCompare(b.name) },
         sortOrder: sortedInfo.columnKey === 'name' && sortedInfo.order,
         ellipsis: true,
-        ...this.getColumnSearchProps('name'),
+        ...this.getColumnSearchProps('name')
       },
       {
         title: 'Surname',
@@ -192,7 +258,27 @@ class TableEmployee extends React.Component {
         sorter: (a, b) => { return a.surname.localeCompare(b.surname) },
         sortOrder: sortedInfo.columnKey === 'surname' && sortedInfo.order,
         ellipsis: true,
-        ...this.getColumnSearchProps('surname'),
+        ...this.getColumnSearchProps('surname')
+      },
+      {
+        title: 'JMBG',
+        dataIndex: 'jmbg',
+        key: 'jmbg',
+        filteredValue: filteredInfo.jmbg || null,
+        sorter: (a, b) => a.jmbg - b.jmbg,
+        sortOrder: sortedInfo.columnKey === 'jmbg' && sortedInfo.order,
+        ellipsis: true,
+        ...this.getColumnSearchProps('jmbg')
+      },
+      {
+        title: 'Birthdate',
+        dataIndex: 'dateOfBirth',
+        key: 'dateOfBirth',
+        filteredValue: filteredInfo.userId || null,
+        sorter: (a, b) => moment(a.dateOfBirth, dateFormat).unix() - moment(b.dateOfBirth, dateFormat).unix(),
+        sortOrder: sortedInfo.columnKey === 'dateOfBirth' && sortedInfo.order,
+        ellipsis: true,
+        ...this.getColumnSearchProps('dateOfBirth')
       },
       {
         title: 'Email',
@@ -202,7 +288,7 @@ class TableEmployee extends React.Component {
         sorter: (a, b) => { return a.email.localeCompare(b.email) },
         sortOrder: sortedInfo.columnKey === 'email' && sortedInfo.order,
         ellipsis: true,
-        ...this.getColumnSearchProps('email'),
+        ...this.getColumnSearchProps('email')
       },
       {
         title: 'Address',
@@ -212,17 +298,17 @@ class TableEmployee extends React.Component {
         sorter: (a, b) => { return a.address.localeCompare(b.address) },
         sortOrder: sortedInfo.columnKey === 'address' && sortedInfo.order,
         ellipsis: true,
-        ...this.getColumnSearchProps('address'),
+        ...this.getColumnSearchProps('address')
       },
       {
-        title: 'Phone number',
+        title: 'Phone',
         dataIndex: 'phoneNumber',
         key: 'phoneNumber',
         filteredValue: filteredInfo.phoneNumber || null,
         sorter: (a, b) => { return a.phoneNumber.localeCompare(b.phoneNumber) },
         sortOrder: sortedInfo.columnKey === 'phoneNumber' && sortedInfo.order,
         ellipsis: true,
-        ...this.getColumnSearchProps('phoneNumber'),
+        ...this.getColumnSearchProps('phoneNumber')
       },
       {
         title: 'Country',
@@ -232,7 +318,7 @@ class TableEmployee extends React.Component {
         sorter: (a, b) => { return a.country.localeCompare(b.country) },
         sortOrder: sortedInfo.columnKey === 'country' && sortedInfo.order,
         ellipsis: true,
-        ...this.getColumnSearchProps('country'),
+        ...this.getColumnSearchProps('country')
       },
       {
         title: 'City',
@@ -242,45 +328,44 @@ class TableEmployee extends React.Component {
         sorter: (a, b) => { return a.city.localeCompare(b.city) },
         sortOrder: sortedInfo.columnKey === 'city' && sortedInfo.order,
         ellipsis: true,
-        ...this.getColumnSearchProps('city'),
+        ...this.getColumnSearchProps('city')
       },
       {
         title: 'Edit',
         dataIndex: 'edit',
-        render: (text, record) =>
-          2 >= 1 ? (
-            <Link to={`/dashboard/update_employee/${record.userId}`}> Edit</Link>
-          ) : null,
-      },
-      {
-        title: 'Cash registers overview',
-        dataIndex: 'Cash register overview',
-        render: (text, record) =>
-          2 >= 1 ? (
-            <Link to={`/dashboard/cash_register/${record.userId}`}> Overview</Link>
-          ) : null,
+        render: (text, record) => (
+          <Link to={`/dashboard/update_employee/${record.userId}`}>Edit</Link>
+        )
       },
       {
         title: 'Delete',
         dataIndex: 'delete',
-        render : (text, record) =>
-        2>=1 ? (
-          
-          <button onClick={i=>this.handleDeleteRow(record.userId)}>Delete</button>
-          
-        ) : null,
+        render: (text, record) => (
+          <Button danger onClick={i => this.handleDeleteRow(record.userId)}>Delete</Button>
+        )
+      },
+      {
+        title: 'Employment history',
+        render: (text, record) =>
+          2 >= 1 ? (
+            <Link to={`/dashboard/employment_history/${record.userId}`}>Overview</Link>
+          ): null,
       }
+
     ];
     return (
       <div>
-        <div className="table-operations">
-          <Button onClick={this.clearAll}>Clear filters and sorters</Button>
-        </div>
         <Table columns={columns} dataSource={this.state.employees} onChange={this.handleChange} />
+        <div className="table-operations" style={{ marginTop: '-48px' }}>
+          <Button onClick={this.clearAll}>Clear filters and sorters</Button>
+          {" "}
+          <Button onClick={this.generateReport}>Generate report</Button>
+        </div>
       </div>
     );
   }
 }
 
 export default TableEmployee;
+
 

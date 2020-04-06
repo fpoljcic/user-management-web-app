@@ -25,14 +25,31 @@ function MyHeader(props) {
                     Home
                     <Link to="/dashboard/home" />
                 </Menu.Item>
+
+                <Menu.Item key="2">
+                    Managers
+                    <Link to="/dashboard/managers" />
+                </Menu.Item>
+
                 <Menu.Item key="3">
+                    Cashiers
+                    <Link to="/dashboard/cashiers" />
+                </Menu.Item>
+
+                <Menu.Item key="4">
                     Add employees
                     <Link to="/dashboard/add_employee" />
-                </Menu.Item> 
-                <Menu.Item key="4" style={{ float: "right", backgroundColor: "#039dfc" }} onClick={handleLogout}>
-                <Img src={require('../img/logout.png')} width='20px' height='20px' paddingRight='100px'/>
-                       {" "}Log out
-                </Menu.Item>                             
+                </Menu.Item>
+
+                <Menu.Item key="5">
+                    Manage employees
+                    <Link to="/dashboard/manage_employees" />
+                </Menu.Item>
+
+                <Menu.Item key="6" style={{ float: "right" }} onClick={handleLogout}>
+                    <Img src={require('../img/logout.png')} width='20px' height='20px' />
+                    {" "}Log out
+                </Menu.Item>
             </Menu>
         </Header>
     );

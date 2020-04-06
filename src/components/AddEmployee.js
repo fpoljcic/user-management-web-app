@@ -1,9 +1,14 @@
 import React from 'react';
 import { Component } from 'react';
-import { Input, Col, Row, Select, InputNumber, DatePicker, AutoComplete, Cascader, Modal, Form, Checkbox } from 'antd';
-import { Button } from 'antd';
+import { Input, Col, Row, Modal, Form, Checkbox, Typography } from 'antd';
+import { Button, DatePicker } from 'antd';
 import axios from 'axios';
 import { getToken } from '../utilities/Common';
+import moment from 'moment';
+
+const { Title } = Typography;
+
+moment.locale('bs')
 
 const CheckboxGroup = Checkbox.Group;
 
@@ -11,6 +16,7 @@ const plainOptions = ['User Manager', 'Warehouse Manager', 'Public Relations Wor
 const defaultCheckedList = ['User Manager'];
 
 let data = [];
+let checkList = defaultCheckedList;
 
 let first = true;
 
@@ -67,13 +73,16 @@ function giveRole(value) {
 let boolName = true;
 let boolSurname = true;
 let boolAddress = true;
-let boolPhone= true;
+let boolPhone = true;
 let boolUsername = true;
 let boolPassword = true;
 let boolEmail = true;
-let boolCountry= true;
-let boolCity= true;
+let boolCountry = true;
+let boolCity = true;
+let boolJMBG = true;
+let boolDate = true;
 
+// eslint-disable-next-line
 const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 const validateForm = (errors) => {
 
@@ -89,10 +98,11 @@ const validateForm = (errors) => {
 class AddEmployee extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
 
             name: '', surname: '', email: '', username: '', password: '', address: '',
-            country: '', city: '', phoneNumber: '',
+            country: '', city: '', phoneNumber: '', jmbg: '', dateOfBirth: '',
             errors: {
                 name: '',
                 username: '',
@@ -102,7 +112,9 @@ class AddEmployee extends Component {
                 address: '',
                 country: '',
                 city: '',
-                phoneNumber: ''
+                phoneNumber: '',
+                jmbg: '',
+                dateOfBirth: ''
             },
             checkedList: data
         };
@@ -110,7 +122,7 @@ class AddEmployee extends Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
-     handleChange = (event) => {
+    handleChange = (event) => {
 
         event.preventDefault();
         const { name, value } = event.target;
@@ -122,7 +134,7 @@ class AddEmployee extends Component {
         switch (name) {
             case 'name':
                 errors.name =
-                    value.length < 2  || boolName
+                    value.length < 2 || boolName
                         ? 'Names must be at least 3 characters long!'
                         : '';
                 boolName = false;
@@ -132,7 +144,7 @@ class AddEmployee extends Component {
                     value.length < 2 || boolSurname
                         ? 'Surnames must be at least 3 characters long!'
                         : '';
-                        boolSurname  = false;
+                boolSurname = false;
                 break;
 
             case 'email':
@@ -141,35 +153,35 @@ class AddEmployee extends Component {
                         ? ''
                         : 'Email is not valid!';
 
-                        boolEmail = false;
+                boolEmail = false;
                 break;
             case 'password':
                 errors.password =
                     value.length < 5 || boolPassword
                         ? 'Passwords must be at least 5 characters long!'
                         : '';
-                        boolPassword = false;
+                boolPassword = false;
                 break;
             case 'country':
                 errors.country =
                     value.length < 3 || boolCountry
                         ? 'Country must contain at least 3 characters!'
                         : '';
-                        boolCountry = false;
+                boolCountry = false;
                 break;
             case 'city':
                 errors.city =
                     value.length < 3 || boolCity
-                        ? 'City must contain at least 5 characters!'
+                        ? 'City must contain at least 3 characters!'
                         : '';
-                        boolCity = false;
+                boolCity = false;
                 break;
             case 'address':
                 errors.address =
                     value.length < 5 || boolAddress
                         ? 'Address must contain at least 5 characters!'
                         : '';
-                        boolAddress= false;
+                boolAddress = false;
                 break;
             case 'username':
                 errors.username =
@@ -177,14 +189,30 @@ class AddEmployee extends Component {
                         ? 'Username must contain at least 5 characters!'
                         : '';
 
-                        boolUsername = false;
+                boolUsername = false;
                 break;
             case 'phoneNumber':
                 errors.phoneNumber =
-                    boolPhone || ( value.length < 6 || value.match(/^[0-9a-zA-Z]+$/) )
+                    boolPhone || (value.length < 6 || value.match(/^[0-9a-zA-Z]+$/))
                         ? 'Phone number is not valid!'
                         : '';
-                        boolPhone = false;
+                boolPhone = false;
+                break;
+            case 'jmbg':
+                errors.jmbg =
+                    value.length !== 13 || boolJMBG || !value.match(/^[0-9]*$/)
+                        ? 'JMBG must contain 13 numbers!'
+                        : '';
+
+                boolJMBG = false;
+                break;
+            case 'dateOfBirth':
+                errors.dateOfBirth =
+                    boolDate
+                        ? 'JMBG must contain 13 numbers!'
+                        : '';
+
+                boolDate = false;
                 break;
             default:
                 break;
@@ -194,10 +222,11 @@ class AddEmployee extends Component {
     }
 
     handleSubmit = values => {
-
+        console.log(this.state)
         values.preventDefault();
 
-        if (validateForm(this.state.errors)) {
+
+        if (validateForm(this.state.errors) && checkList.length !== 0) {
 
             console.log(data);
 
@@ -216,6 +245,8 @@ class AddEmployee extends Component {
                     phoneNumber: this.state.phoneNumber,
                     country: this.state.country,
                     city: this.state.city,
+                    jmbg: this.state.jmbg,
+                    dateOfBirth: this.state.dateOfBirth,
                     roles: data
                 }
             })
@@ -244,11 +275,11 @@ class AddEmployee extends Component {
 
     render() {
         const { errors } = this.state;
-     
+
         return (
             <div className="site-layout-content">
-
-                <div className="site-input-group-wrapper" style={{ marginTop: '2%' }}>
+                <Title style={{ fontFamily: 'Roboto-Thin' }} level={3}>Add a new employee</Title>
+                <div className="site-input-group-wrapper" >
                     <Form handleSubmit={this.handleSubmit}>
                         <Input.Group size="large">
                             <Row gutter={10}>
@@ -270,29 +301,6 @@ class AddEmployee extends Component {
                                 </Col>
                             </Row>
                         </Input.Group>
-                        <br />
-
-                        <Input.Group size="large">
-                            <Row gutter={10}>
-                                <Col span={7}>
-                                    <Input name="username" placeholder="Username" onChange={this.handleChange} />
-                                    <div className='info'></div>
-                                    {errors.username.length > 0 &&
-                                        <span className='error' style={{ color: 'red' }} >{errors.username}</span>}
-                                </Col>
-                                <Col span={7}>
-                                    <Input name="password" placeholder="Password" onChange={this.handleChange} />
-                                    {errors.password.length > 0 &&
-                                        <span className='error' style={{ color: 'red' }}>{errors.password}</span>}
-                                    <div className='info'>
-                                    </div>
-                                </Col>
-                            </Row>
-                        </Input.Group>
-
-                        <br />
-                        <br />
-                        <br />
 
                         <Input.Group size="large">
                             <Row gutter={10}>
@@ -313,9 +321,56 @@ class AddEmployee extends Component {
                                 </Col>
                             </Row>
                         </Input.Group>
+
+                        <br />
+
+
+                        <Input.Group size="large">
+                            <Row gutter={10}>
+                                <Col span={7}>
+                                    <Input name="jmbg" placeholder="JMBG" onChange={this.handleChange} />
+                                    <div className='info'></div>
+                                    {errors.jmbg.length > 0 &&
+                                        <span className='error' style={{ color: 'red' }} >{errors.jmbg}</span>}
+                                </Col>
+                                <Col span={7}>
+
+                                    <DatePicker style={{ width: '100%' }} placeholder="Birth date" name="dateOfBirth"
+                                        onChange={date => {
+                                            this.setState({ dateOfBirth: date.format('DD.MM.YYYY') })
+                                        }}
+                                    />
+
+                                </Col>
+                            </Row>
+                        </Input.Group>
+
                         <br />
                         <br />
+
+                        <Input.Group size="large">
+                            <Row gutter={10}>
+                                <Col span={7}>
+                                    <Input name="username" placeholder="Username" onChange={this.handleChange} />
+                                    <div className='info'></div>
+                                    {errors.username.length > 0 &&
+                                        <span className='error' style={{ color: 'red' }} >{errors.username}</span>}
+                                </Col>
+                                <Col span={7}>
+                                    <Input name="password" placeholder="Password" onChange={this.handleChange} />
+                                    {errors.password.length > 0 &&
+                                        <span className='error' style={{ color: 'red' }}>{errors.password}</span>}
+                                    <div className='info'>
+                                    </div>
+                                </Col>
+                            </Row>
+                        </Input.Group>
+
+
                         <br />
+                        <br />
+
+
 
                         <Input.Group size="large">
                             <Row gutter={10}>
@@ -392,11 +447,15 @@ class MyCheckBox extends React.Component {
             checkAll: checkedList.length === plainOptions.length,
         });
 
+        checkList = checkedList;
+
         let list = [];
         checkedList.forEach((index) => {
             list.push({ "rolename": giveRole(index) });
         });
         data = list;
+
+        console.log(checkList, checkList.length);
     };
 
     onCheckAllChange = e => {
@@ -406,6 +465,8 @@ class MyCheckBox extends React.Component {
             checkAll: e.target.checked,
         });
 
+
+        checkList = e.target.checked ? plainOptions : [];
 
         let list = [];
         let temp = e.target.checked ? plainOptions : [];
@@ -419,16 +480,6 @@ class MyCheckBox extends React.Component {
         return (
             <div>
                 <div className="site-checkbox-all-wrapper" style={{ width: '50%' }}>
-
-                    <Checkbox
-
-                        indeterminate={this.state.indeterminate}
-                        onChange={this.onCheckAllChange}
-                        checked={this.state.checkAll}
-                    >
-                        Check all
-          </Checkbox>
-
                 </div>
                 <br />
                 <CheckboxGroup
