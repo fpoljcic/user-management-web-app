@@ -216,6 +216,7 @@ class ManageEmployees extends React.Component {
 
         }).then(response => {
 
+            this.sendNotification("false");
             this.changeCurrentWorker(this.state.currentWorkerId);
 
         }).catch((err) => {
