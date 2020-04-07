@@ -168,7 +168,6 @@ Slanje notifikacije o zaposlenja nove osobe
 ## Item
 Merchant mora imati mogućnost da pošalje notfikaciju Merchant Dashboard web aplikaciji u slučaju zaposlenja nove osobe u poslovnicu.
 ### Task
-* Kreirati dugme za uključenje / isključenje slanja notifikacije Merchant Dashboard web aplikaciji u slučaju zaposlenja nove osobe u poslovnicu
 * Implementirati slanje notifikacije prema servera nakon dodavanja uposlenika u slučaju da su notifikacije uključene
 * Uraditi push koda
 * Napraviti pull request
@@ -178,7 +177,6 @@ Slanje notifikacije o otpuštanju postojećeg uposlenika
 ## Item
 Merchant mora imati mogućnost da pošalje notifikaciju Merchant Dashboard web aplikaciji u slučaju davanja otkaza nekom uposleniku.
 ### Task
-* Kreirati dugme za uključenje / isključenje slanja notifikacije Merchant Dashboard web aplikaciji u slučaju otpuštanja postojećeg uposlenika
 * Implementirati slanje notifikacije prema servera nakon otpuštanja uposlenika u slučaju da su notifikacije uključene
 * Uraditi push koda
 * Napraviti pull request
