@@ -4,6 +4,7 @@ import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { getToken } from '../utilities/Common';
+import moment from 'moment'
 
 
 function invalid() {
@@ -84,7 +85,6 @@ class ManageEmployees extends React.Component {
             })
             .catch(err => console.log(err));
     }
-
     getManagers() {
         axios.get('https://main-server-si.herokuapp.com/api/employees', { headers: { Authorization: 'Bearer ' + getToken() } })
             .then(response => {
@@ -146,16 +146,10 @@ class ManageEmployees extends React.Component {
                     if (pom === 7) role = "false";
                     else role = "true";
 
-
                     let filterTest = this.state.offices
                     let fired = response.data
 
-                    console.log(fired);
-
                     let niz = filterTest.filter(e => this.hiredRadnici(e, response.data));
-
-
-                    console.log("hire", niz, response.data);
 
                     this.setState({ fireoffices: response.data, hireoffices: niz, currentWorkerId: userId, currentRole: role })
                 })
@@ -166,7 +160,7 @@ class ManageEmployees extends React.Component {
 
                         let temp = this.state.employees.find(i => i.userId === userId);
                         let pom = temp.roles[0].id
-    
+
                         if (pom === 7) role = "false";
                         else role = "true";
 
@@ -201,6 +195,7 @@ class ManageEmployees extends React.Component {
         })
             .then((response) => {
 
+                this.sendNotification("true");
                 this.changeCurrentWorker(this.state.currentWorkerId);
             }, (error) => {
 
@@ -221,7 +216,6 @@ class ManageEmployees extends React.Component {
 
         }).then(response => {
 
-
             this.changeCurrentWorker(this.state.currentWorkerId);
 
         }).catch((err) => {
@@ -229,6 +223,24 @@ class ManageEmployees extends React.Component {
         })
 
     };
+
+     sendNotification(hired) {
+        axios.request({
+            method: 'post',
+            url: 'https://main-server-si.herokuapp.com/api/notifications/send',
+            headers: { Authorization: 'Bearer ' + getToken() },
+            data: {
+                employeeId: this.state.currentWorkerId,
+                hired: hired,
+                date: moment().format('DD.MM.YYYY'),
+                time: moment().format('HH:MM') 
+            }
+        })
+            .then((response) => {
+            }, (error) => {
+
+            });
+    }
 
 
     getColumnSearchProps1 = dataIndex => ({
