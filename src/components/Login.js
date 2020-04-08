@@ -76,7 +76,7 @@ const Login = (props) => {
                             },
                         ]}
                     >
-                        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" onChange={hideWarning} />
+                        <Input  style = {{borderRadius: '25px'}} prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" onChange={hideWarning} />
                     </Form.Item>
                     <Form.Item
                         name="password"
@@ -92,6 +92,7 @@ const Login = (props) => {
                             type="password"
                             placeholder="Password"
                             onChange={hideWarning}
+                            style = {{borderRadius: '25px'}}
                         />
                     </Form.Item>
                     {showWarning ?
