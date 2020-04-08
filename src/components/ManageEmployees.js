@@ -128,7 +128,7 @@ class ManageEmployees extends React.Component {
         if (this.isOffMan(userId)) {
             console.log("provjera offman");
 
-            // Office managera ne mozemo zaposliti,a li mozemo otpustiti
+            // Office managera ne mozemo zaposliti, ali mozemo otpustiti
             let niz = this.state.offices.filter(e => e.manager.id === userId);
             this.setState({ hireoffices: null, fireoffices: niz, currentWorkerId: userId });
         }
@@ -367,7 +367,7 @@ class ManageEmployees extends React.Component {
                 title: 'ID',
                 dataIndex: 'userId',
                 key: 'userId',
-                width: '10%',
+                width: '15%',
                 ...this.getColumnSearchProps1('ID'),
 
             },
@@ -375,13 +375,13 @@ class ManageEmployees extends React.Component {
                 title: 'Name',
                 dataIndex: 'name',
                 key: 'name',
-                width: '20%',
+                width: '30%',
                 ...this.getColumnSearchProps1('name'),
             },
             {
                 title: 'Surname',
                 dataIndex: 'surname',
-                width: '20%',
+                width: '30%',
                 key: 'surname',
                 ...this.getColumnSearchProps1('surname'),
             },
@@ -451,11 +451,11 @@ class ManageEmployees extends React.Component {
                 ...this.getColumnSearchProps2('city'),
             },
             {
-                title: 'Fire',
+                title: 'Unassign',
                 dataIndex: 'offices',
                 render: (text, record) =>
                     2 >= 1 ? (
-                        <Button type="primary" onClick={i => this.fireWorker(record.id)} > Fire </Button>
+                        <Button type="primary" onClick={i => this.fireWorker(record.id)} > Unassign </Button>
                     ) : null,
             }
         ];
