@@ -180,3 +180,15 @@ Merchant mora imati mogućnost da pošalje notifikaciju Merchant Dashboard web a
 * Implementirati slanje notifikacije prema serveru nakon otpuštanja uposlenika
 * Uraditi push koda
 * Napraviti pull request
+
+# Feature
+Pregled svih aktivnosti korisnika sistema (log)
+## Item
+Merchant mora imati mogućnost pregleda svih aktivnosti korisnika sistema (log koji prikazuje vrstu akcije, datum, vrijeme i slične informacije) uz filtriranje i sortiranje.
+### Task
+* Kreirati izgled stranice za pregled svih aktivnosti korisnika sistema
+* Implementirati dobavljanje potrebnih podataka za sve korisnike sa servera
+* Implementirati mogućnost pretrage (filtriranja) redova u logu po svakom atributu
+* Implementirati mogućnost sortiranja redova u logu po svakom atributu
+* Uraditi push koda
+* Napraviti pull request
