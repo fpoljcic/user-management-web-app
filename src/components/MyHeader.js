@@ -46,7 +46,12 @@ function MyHeader(props) {
                     <Link to="/dashboard/manage_employees" />
                 </Menu.Item>
 
-                <Menu.Item key="6" style={{ float: "right" }} onClick={handleLogout}>
+                <Menu.Item key="6" >
+                    User log
+                    <Link to="/dashboard/user_log" />
+                </Menu.Item>
+
+                <Menu.Item key="7" style={{ float: "right" }} onClick={handleLogout}>
                     <Img src={require('../img/logout.png')} width='20px' height='20px' />
                     {" "}Log out
                 </Menu.Item>
