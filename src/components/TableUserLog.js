@@ -1,7 +1,6 @@
 import React from 'react';
 import { Table, Input, Button } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { getToken } from '../utilities/Common';
 
@@ -12,27 +11,43 @@ class TableUserLog extends React.Component {
     constructor() {
         super();
         this.state = {
-            employees: [],
+            logs: [],
             filteredInfo: null,
             sortedInfo: null,
-            empl: [],
             searchText: '',
             searchedColumn: '',
         }
     }
 
     componentWillMount() {
-        this.getEmployees();
+        this.getLogs();
     }
 
-    getEmployees() {
-        axios.get('https://main-server-si.herokuapp.com/api/employees', { headers: { Authorization: 'Bearer ' + getToken() } })
+    timeConverter(timestamp) {
+        let a = new Date(timestamp);
+        let year = a.getFullYear();
+        let month = a.getMonth() + 1;
+        let date = a.getDate();
+        let hour = a.getHours() < 10 ? '0' + a.getHours() : a.getHours();
+        let min = a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes();
+        let time = date + '.' + month + '.' + year + ' ' + hour + ':' + min;
+        return time;
+    }
+
+    getLogs() {
+        axios.get('https://main-server-si.herokuapp.com/admin/logs', { headers: { Authorization: 'Bearer ' + getToken() } })
             .then(response => {
-                let cashiers = response.data.filter((entry) => {
-                    return entry.roles.some(item => item.rolename === "ROLE_OFFICEMAN");
-                })
-                this.setState({ employees: cashiers }, () => {
-                    console.log(this.state.employees);
+                let logs = response.data.logs;
+                logs.map(log => {
+                    log.timestamp = this.timeConverter(log.timestamp);
+                    log.name = log.action.name;
+                    log.description = log.action.description;
+                    log.object = log.action.object;
+                    delete log.action;
+                    return log;
+                });
+                this.setState({ logs: logs }, () => {
+                    console.log(this.state.logs);
                 })
             })
             .catch(err => console.log(err));
@@ -135,17 +150,27 @@ class TableUserLog extends React.Component {
         filteredInfo = filteredInfo || {};
         const columns = [
             {
-                title: 'ID',
-                dataIndex: 'userId',
-                key: 'userId',
+                title: 'Date',
+                dataIndex: 'timestamp',
+                key: 'timestamp',
                 filteredValue: filteredInfo.userId || null,
-                sorter: (a, b) => a.userId - b.userId,
-                sortOrder: sortedInfo.columnKey === 'userId' && sortedInfo.order,
+                sorter: (a, b) => a.timestamp - b.timestamp,
+                sortOrder: sortedInfo.columnKey === 'timestamp' && sortedInfo.order,
                 ellipsis: true,
-                ...this.getColumnSearchProps('userId'),
+                ...this.getColumnSearchProps('timestamp'),
             },
             {
-                title: 'Name',
+                title: 'Username',
+                dataIndex: 'username',
+                key: 'username',
+                filteredValue: filteredInfo.username || null,
+                sorter: (a, b) => { return a.username.localeCompare(b.username) },
+                sortOrder: sortedInfo.columnKey === 'username' && sortedInfo.order,
+                ellipsis: true,
+                ...this.getColumnSearchProps('username'),
+            },
+            {
+                title: 'Action',
                 dataIndex: 'name',
                 key: 'name',
                 filteredValue: filteredInfo.name || null,
@@ -155,83 +180,29 @@ class TableUserLog extends React.Component {
                 ...this.getColumnSearchProps('name'),
             },
             {
-                title: 'Surname',
-                dataIndex: 'surname',
-                key: 'surname',
-                filteredValue: filteredInfo.surname || null,
-                sorter: (a, b) => { return a.surname.localeCompare(b.surname) },
-                sortOrder: sortedInfo.columnKey === 'surname' && sortedInfo.order,
+                title: 'Object',
+                key: 'object',
+                dataIndex: 'object',
+                filteredValue: filteredInfo.object || null,
+                sorter: (a, b) => { return a.object.localeCompare(b.object) },
+                sortOrder: sortedInfo.columnKey === 'object' && sortedInfo.order,
                 ellipsis: true,
-                ...this.getColumnSearchProps('surname'),
+                ...this.getColumnSearchProps('object'),
             },
             {
-                title: 'Email',
-                key: 'email',
-                dataIndex: 'email',
-                filteredValue: filteredInfo.email || null,
-                sorter: (a, b) => { return a.email.localeCompare(b.email) },
-                sortOrder: sortedInfo.columnKey === 'email' && sortedInfo.order,
+                title: 'Description',
+                key: 'description',
+                dataIndex: 'description',
+                filteredValue: filteredInfo.description || null,
+                sorter: (a, b) => { return a.description.localeCompare(b.description) },
+                sortOrder: sortedInfo.columnKey === 'description' && sortedInfo.order,
                 ellipsis: true,
-                ...this.getColumnSearchProps('email'),
-            },
-            {
-                title: 'Address',
-                key: 'address',
-                dataIndex: 'address',
-                filteredValue: filteredInfo.address || null,
-                sorter: (a, b) => { return a.address.localeCompare(b.address) },
-                sortOrder: sortedInfo.columnKey === 'address' && sortedInfo.order,
-                ellipsis: true,
-                ...this.getColumnSearchProps('address'),
-            },
-            {
-                title: 'Phone number',
-                dataIndex: 'phoneNumber',
-                key: 'phoneNumber',
-                filteredValue: filteredInfo.phoneNumber || null,
-                sorter: (a, b) => { return a.phoneNumber.localeCompare(b.phoneNumber) },
-                sortOrder: sortedInfo.columnKey === 'phoneNumber' && sortedInfo.order,
-                ellipsis: true,
-                ...this.getColumnSearchProps('phoneNumber'),
-            },
-            {
-                title: 'Country',
-                dataIndex: 'country',
-                key: 'country',
-                filteredValue: filteredInfo.country || null,
-                sorter: (a, b) => { return a.country.localeCompare(b.country) },
-                sortOrder: sortedInfo.columnKey === 'country' && sortedInfo.order,
-                ellipsis: true,
-                ...this.getColumnSearchProps('country'),
-            },
-            {
-                title: 'City',
-                dataIndex: 'city',
-                key: 'city',
-                filteredValue: filteredInfo.city || null,
-                sorter: (a, b) => { return a.city.localeCompare(b.city) },
-                sortOrder: sortedInfo.columnKey === 'city' && sortedInfo.order,
-                ellipsis: true,
-                ...this.getColumnSearchProps('city'),
-            },
-            {
-                title: 'Cash registers overview',
-                dataIndex: 'Cash register overview',
-                render: (text, record) => (
-                    <Link to={`/dashboard/cash_register/${record.userId}`}>Overview</Link>
-                )
-            },
-            {
-                title: 'Receipts overview',
-                dataIndex: 'Receipts overview',
-                render: (text, record) => (
-                    <Link to={`/dashboard/receipts/${record.userId}`}>Overview</Link>
-                )
+                ...this.getColumnSearchProps('description'),
             }
         ];
         return (
             <div>
-                <Table columns={columns} dataSource={this.state.employees} onChange={this.handleChange} />
+                <Table columns={columns} dataSource={this.state.logs} onChange={this.handleChange} />
                 <div className="table-operations" style={{ marginTop: '-48px' }}>
                     <Button onClick={this.clearAll}>Clear filters and sorters</Button>
                     {/*<Button style={{marginLeft: '5px'}} onClick={this.saveLog}>Save user log as txt</Button>*/}

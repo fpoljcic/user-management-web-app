@@ -20,7 +20,6 @@ class TableEmployee extends React.Component {
       employees: [],
       filteredInfo: null,
       sortedInfo: null,
-      empl: [],
       searchText: '',
       searchedColumn: '',
     }
