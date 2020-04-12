@@ -4,6 +4,7 @@ import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { getToken } from '../utilities/Common';
+import moment from 'moment'
 
 
 function invalid() {
@@ -84,7 +85,6 @@ class ManageEmployees extends React.Component {
             })
             .catch(err => console.log(err));
     }
-
     getManagers() {
         axios.get('https://main-server-si.herokuapp.com/api/employees', { headers: { Authorization: 'Bearer ' + getToken() } })
             .then(response => {
@@ -128,7 +128,7 @@ class ManageEmployees extends React.Component {
         if (this.isOffMan(userId)) {
             console.log("provjera offman");
 
-            // Office managera ne mozemo zaposliti,a li mozemo otpustiti
+            // Office managera ne mozemo zaposliti, ali mozemo otpustiti
             let niz = this.state.offices.filter(e => e.manager.id === userId);
             this.setState({ hireoffices: null, fireoffices: niz, currentWorkerId: userId });
         }
@@ -146,16 +146,9 @@ class ManageEmployees extends React.Component {
                     if (pom === 7) role = "false";
                     else role = "true";
 
-
                     let filterTest = this.state.offices
-                    let fired = response.data
-
-                    console.log(fired);
 
                     let niz = filterTest.filter(e => this.hiredRadnici(e, response.data));
-
-
-                    console.log("hire", niz, response.data);
 
                     this.setState({ fireoffices: response.data, hireoffices: niz, currentWorkerId: userId, currentRole: role })
                 })
@@ -166,7 +159,7 @@ class ManageEmployees extends React.Component {
 
                         let temp = this.state.employees.find(i => i.userId === userId);
                         let pom = temp.roles[0].id
-    
+
                         if (pom === 7) role = "false";
                         else role = "true";
 
@@ -201,6 +194,7 @@ class ManageEmployees extends React.Component {
         })
             .then((response) => {
 
+                this.sendNotification("true");
                 this.changeCurrentWorker(this.state.currentWorkerId);
             }, (error) => {
 
@@ -221,7 +215,7 @@ class ManageEmployees extends React.Component {
 
         }).then(response => {
 
-
+            this.sendNotification("false");
             this.changeCurrentWorker(this.state.currentWorkerId);
 
         }).catch((err) => {
@@ -229,6 +223,24 @@ class ManageEmployees extends React.Component {
         })
 
     };
+
+     sendNotification(hired) {
+        axios.request({
+            method: 'post',
+            url: 'https://main-server-si.herokuapp.com/api/notifications/send',
+            headers: { Authorization: 'Bearer ' + getToken() },
+            data: {
+                employeeId: this.state.currentWorkerId,
+                hired: hired,
+                date: moment().format('DD.MM.YYYY'),
+                time: moment().format('HH:MM') 
+            }
+        })
+            .then((response) => {
+            }, (error) => {
+
+            });
+    }
 
 
     getColumnSearchProps1 = dataIndex => ({
@@ -354,7 +366,7 @@ class ManageEmployees extends React.Component {
                 title: 'ID',
                 dataIndex: 'userId',
                 key: 'userId',
-                width: '10%',
+                width: '15%',
                 ...this.getColumnSearchProps1('ID'),
 
             },
@@ -362,13 +374,13 @@ class ManageEmployees extends React.Component {
                 title: 'Name',
                 dataIndex: 'name',
                 key: 'name',
-                width: '20%',
+                width: '30%',
                 ...this.getColumnSearchProps1('name'),
             },
             {
                 title: 'Surname',
                 dataIndex: 'surname',
-                width: '20%',
+                width: '30%',
                 key: 'surname',
                 ...this.getColumnSearchProps1('surname'),
             },
@@ -438,11 +450,11 @@ class ManageEmployees extends React.Component {
                 ...this.getColumnSearchProps2('city'),
             },
             {
-                title: 'Fire',
+                title: 'Unassign',
                 dataIndex: 'offices',
                 render: (text, record) =>
                     2 >= 1 ? (
-                        <Button type="primary" onClick={i => this.fireWorker(record.id)} > Fire </Button>
+                        <Button type="primary" onClick={i => this.fireWorker(record.id)} > Unassign </Button>
                     ) : null,
             }
         ];
