@@ -59,13 +59,13 @@ class TableEmployee extends React.Component {
   };
 
 
-  generateReport = () => { 
+  generateReport = () => {
     let filtered = [];
     for (var key in this.state.filteredInfo) {
       if (this.state.filteredInfo.hasOwnProperty(key) && this.state.filteredInfo[key] != null) {
         filtered.push({
           key: key,
-          value: this.state.filteredInfo[key][0]
+          value: this.state.filteredInfo[key][0].toString().toLowerCase()
         });
       }
     }
@@ -73,7 +73,7 @@ class TableEmployee extends React.Component {
     // filtriranje
     let newEmployees = this.state.employees.filter((emp) => {
       for (let element of filtered) {
-        if (emp[element.key] !== element.value) {
+        if (!emp[element.key].toString().toLowerCase().includes(element.value)) {
           return false;
         }
       }
@@ -81,7 +81,7 @@ class TableEmployee extends React.Component {
     });
 
     // sortiranje
-    if(this.state.sortedInfo !== null) {
+    if (this.state.sortedInfo !== null) {
       if (this.state.sortedInfo.order) {
         key = this.state.sortedInfo.columnKey
         let order = this.state.sortedInfo.order === "ascend" ? 1 : -1;
@@ -95,10 +95,10 @@ class TableEmployee extends React.Component {
 
     // zaposleni sa tabele
     console.log(newEmployees);
-       
+
     const unit = "pt";
-    const size = "A4"; 
-    const orientation = "portrait"; 
+    const size = "A4";
+    const orientation = "portrait";
 
     const marginLeft = 40;
     const doc = new jsPDF(orientation, unit, size);
@@ -114,7 +114,7 @@ class TableEmployee extends React.Component {
       head: headers,
       body: data
     };
-    
+
     doc.text(title, marginLeft, 40);
     doc.autoTable(content);
     doc.setProperties({
@@ -124,7 +124,7 @@ class TableEmployee extends React.Component {
     doc.save('user_management_web_app_report');
   };
 
-  handleDeleteRow(userId){
+  handleDeleteRow(userId) {
     let i;
     let rows = [...this.state.employees]
     for (i = 0; i < rows.length; i++)
@@ -354,7 +354,7 @@ class TableEmployee extends React.Component {
         <Table columns={columns} dataSource={this.state.employees} onChange={this.handleChange} />
         <div className="table-operations" style={{ marginTop: '-48px' }}>
           <Button onClick={this.clearAll}>Clear filters and sorters</Button>
-          <Button style={{marginLeft: '5px'}} onClick={this.generateReport}>Generate report</Button>
+          <Button style={{ marginLeft: '5px' }} onClick={this.generateReport}>Generate report</Button>
         </div>
       </div>
     );

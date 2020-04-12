@@ -1,24 +1,31 @@
 import React from 'react';
-import { Table, Input, Button } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+import { Table, Input, Button, Menu, Dropdown, Typography } from 'antd';
+import { SearchOutlined, DownOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { getToken } from '../utilities/Common';
 import DownloadExcel from './DownloadExcel';
 
 import Highlighter from 'react-highlight-words';
 
+const { Title } = Typography;
+
 
 class TableUserLog extends React.Component {
     constructor() {
         super();
         this.state = {
+            initialLogs: [],
             logs: [],
             filteredInfo: null,
             sortedInfo: null,
             searchText: '',
             searchedColumn: '',
+            selectedMonth: 'Select month'
         }
     }
+
+    months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
 
     componentWillMount() {
         this.getLogs();
@@ -47,7 +54,7 @@ class TableUserLog extends React.Component {
                     delete log.action;
                     return log;
                 });
-                this.setState({ logs: logs }, () => {
+                this.setState({ initialLogs: logs, logs: logs }, () => {
                     console.log(this.state.logs);
                 })
             })
@@ -70,7 +77,9 @@ class TableUserLog extends React.Component {
         this.setState({
             filteredInfo: null,
             sortedInfo: null,
-            searchText: ''
+            searchText: '',
+            selectedMonth: 'Select month',
+            logs: this.state.initialLogs
         });
     };
 
@@ -146,7 +155,7 @@ class TableUserLog extends React.Component {
             if (this.state.filteredInfo.hasOwnProperty(key) && this.state.filteredInfo[key] != null) {
                 filtered.push({
                     key: key,
-                    value: this.state.filteredInfo[key][0]
+                    value: this.state.filteredInfo[key][0].toString().toLowerCase()
                 });
             }
         }
@@ -154,7 +163,7 @@ class TableUserLog extends React.Component {
         // filtriranje
         let newLog = this.state.logs.filter((log) => {
             for (let element of filtered) {
-                if (log[element.key] !== element.value) {
+                if (!log[element.key].toString().toLowerCase().includes(element.value)) {
                     return false;
                 }
             }
@@ -188,6 +197,54 @@ class TableUserLog extends React.Component {
         return 0;
     }
 
+    handleMenuClick = (e) => {
+        if (this.state.selectedMonth === 'Select month')
+            this.setState({ initialLogs: this.state.logs });
+        this.setState({ selectedMonth: this.months[e.key] });
+        this.setState({ logs: this.state.initialLogs.filter((log) => parseInt(log.timestamp.split(".")[1]) === parseInt(e.key) + 1) })
+    }
+
+    menu = (
+        <Menu onClick={this.handleMenuClick}>
+            <Menu.Item key="0">
+                {this.months[0]}
+            </Menu.Item>
+            <Menu.Item key="1">
+                {this.months[1]}
+            </Menu.Item>
+            <Menu.Item key="2">
+                {this.months[2]}
+            </Menu.Item>
+            <Menu.Item key="3">
+                {this.months[3]}
+            </Menu.Item>
+            <Menu.Item key="4">
+                {this.months[4]}
+            </Menu.Item>
+            <Menu.Item key="5">
+                {this.months[5]}
+            </Menu.Item>
+            <Menu.Item key="6">
+                {this.months[6]}
+            </Menu.Item>
+            <Menu.Item key="7">
+                {this.months[7]}
+            </Menu.Item>
+            <Menu.Item key="8">
+                {this.months[8]}
+            </Menu.Item>
+            <Menu.Item key="9">
+                {this.months[9]}
+            </Menu.Item>
+            <Menu.Item key="10">
+                {this.months[10]}
+            </Menu.Item>
+            <Menu.Item key="11">
+                {this.months[11]}
+            </Menu.Item>
+        </Menu>
+    );
+
     render() {
         let sortedInfo = this.state.sortedInfo;
         let filteredInfo = this.state.filteredInfo;
@@ -198,7 +255,7 @@ class TableUserLog extends React.Component {
                 title: 'Date',
                 dataIndex: 'timestamp',
                 key: 'timestamp',
-                filteredValue: filteredInfo.userId || null,
+                filteredValue: filteredInfo.timestamp || null,
                 sorter: (a, b) => { return this.customCompareDates(a.timestamp, b.timestamp) },
                 sortOrder: sortedInfo.columnKey === 'timestamp' && sortedInfo.order,
                 ellipsis: true,
@@ -247,6 +304,14 @@ class TableUserLog extends React.Component {
         ];
         return (
             <div>
+                <div >
+                    <Title style={{ fontFamily: 'Roboto-Thin', float: 'left' }} level={3}>Log of all user activity</Title>
+                    <Dropdown overlay={this.menu}>
+                        <Button style={{ float: 'right', position: 'relative', zIndex: '99' }}>
+                            {this.state.selectedMonth} <DownOutlined />
+                        </Button>
+                    </Dropdown>
+                </div>
                 <Table columns={columns} dataSource={this.state.logs} onChange={this.handleChange} />
                 <div className="table-operations" style={{ marginTop: '-48px' }}>
                     <Button onClick={this.clearAll}>Clear filters and sorters</Button>
