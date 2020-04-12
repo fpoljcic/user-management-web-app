@@ -3,6 +3,7 @@ import { Table, Input, Button } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { getToken } from '../utilities/Common';
+import DownloadExcel from './DownloadExcel';
 
 import Highlighter from 'react-highlight-words';
 
@@ -138,11 +139,55 @@ class TableUserLog extends React.Component {
         clearFilters();
         this.setState({ searchText: '' });
     };
-    /*
-        saveLog = () => {
-            alert("aaaaaaaaa");
+
+    getFiltered = () => {
+        let filtered = [];
+        for (var key in this.state.filteredInfo) {
+            if (this.state.filteredInfo.hasOwnProperty(key) && this.state.filteredInfo[key] != null) {
+                filtered.push({
+                    key: key,
+                    value: this.state.filteredInfo[key][0]
+                });
+            }
         }
-    */
+
+        // filtriranje
+        let newLog = this.state.logs.filter((log) => {
+            for (let element of filtered) {
+                if (log[element.key] !== element.value) {
+                    return false;
+                }
+            }
+            return true;
+        });
+
+        // sortiranje
+        if (this.state.sortedInfo !== null) {
+            if (this.state.sortedInfo.order) {
+                key = this.state.sortedInfo.columnKey
+                let order = this.state.sortedInfo.order === "ascend" ? 1 : -1;
+                newLog.sort((log1, log2) => {
+                    if (key === "timestamp")
+                        return this.customCompareDates(log1[key], log2[key]);
+                    return log1[key].localeCompare(log2[key]) * order;
+                });
+            }
+        }
+        return newLog;
+    }
+
+    customCompareDates = (a, b) => {
+        let dateA = a.replace(":", ".").replace(" ", ".").split(".");
+        let dateB = b.replace(":", ".").replace(" ", ".").split(".");
+        dateA = (new Date(parseInt(dateA[2]), parseInt(dateA[1]), parseInt(dateA[0]), parseInt(dateA[3]), parseInt(dateA[4]))).getTime();
+        dateB = (new Date(parseInt(dateB[2]), parseInt(dateB[1]), parseInt(dateB[0]), parseInt(dateB[3]), parseInt(dateB[4]))).getTime();
+        if (dateA > dateB)
+            return 1;
+        if (dateA < dateB)
+            return -1;
+        return 0;
+    }
+
     render() {
         let sortedInfo = this.state.sortedInfo;
         let filteredInfo = this.state.filteredInfo;
@@ -154,7 +199,7 @@ class TableUserLog extends React.Component {
                 dataIndex: 'timestamp',
                 key: 'timestamp',
                 filteredValue: filteredInfo.userId || null,
-                sorter: (a, b) => a.timestamp - b.timestamp,
+                sorter: (a, b) => { return this.customCompareDates(a.timestamp, b.timestamp) },
                 sortOrder: sortedInfo.columnKey === 'timestamp' && sortedInfo.order,
                 ellipsis: true,
                 ...this.getColumnSearchProps('timestamp'),
@@ -205,7 +250,7 @@ class TableUserLog extends React.Component {
                 <Table columns={columns} dataSource={this.state.logs} onChange={this.handleChange} />
                 <div className="table-operations" style={{ marginTop: '-48px' }}>
                     <Button onClick={this.clearAll}>Clear filters and sorters</Button>
-                    {/*<Button style={{marginLeft: '5px'}} onClick={this.saveLog}>Save user log as txt</Button>*/}
+                    <DownloadExcel data={this.getFiltered(this.state.logs)} filename="User_log" />
                 </div>
             </div>
         );

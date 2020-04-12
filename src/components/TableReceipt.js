@@ -7,7 +7,7 @@ const columns = [
     {
         title: 'Date',
         dataIndex: 'timestamp',
-        sorter: { compare: (a, b) => a.timestamp.localeCompare(b.timestamp) }
+        sorter: (a, b) => { return customCompareDates(a.timestamp, b.timestamp) }
     },
     {
         title: 'Receipt ID',
@@ -35,6 +35,18 @@ const columns = [
         sorter: { compare: (a, b) => a.totalPrice - b.totalPrice }
     }
 ];
+
+function customCompareDates(a, b) {
+    let dateA = a.replace(":", ".").replace(" ", ".").split(".");
+    let dateB = b.replace(":", ".").replace(" ", ".").split(".");
+    dateA = (new Date(parseInt(dateA[2]), parseInt(dateA[1]), parseInt(dateA[0]), parseInt(dateA[3]), parseInt(dateA[4]))).getTime();
+    dateB = (new Date(parseInt(dateB[2]), parseInt(dateB[1]), parseInt(dateB[0]), parseInt(dateB[3]), parseInt(dateB[4]))).getTime();
+    if (dateA > dateB)
+        return 1;
+    if (dateA < dateB)
+        return -1;
+    return 0;
+}
 
 function timeConverter(timestamp) {
     let a = new Date(timestamp);
