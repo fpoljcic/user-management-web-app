@@ -17,6 +17,7 @@ import MyFooter from './MyFooter';
 import TableCashRegister from './TableCashRegister';
 import TableReceipt from './TableReceipt';
 import TableEmploymentHistory from './TableEmploymentHistory';
+import TableUserLog from './TableUserLog';
 
 const { Content } = Layout;
 
@@ -35,6 +36,7 @@ function Dashboard(props) {
           <PrivateRoute path="/dashboard/cash_register/:id" component={TableCashRegister} />
           <PrivateRoute path="/dashboard/receipts/:id" component={TableReceipt} />
           <PrivateRoute path="/dashboard/employment_history/:id" component={TableEmploymentHistory}/>
+          <PrivateRoute path="/dashboard/user_log" component={TableUserLog}/>
         </Content>
         <MyFooter />
       </Layout>

@@ -147,7 +147,6 @@ class ManageEmployees extends React.Component {
                     else role = "true";
 
                     let filterTest = this.state.offices
-                    let fired = response.data
 
                     let niz = filterTest.filter(e => this.hiredRadnici(e, response.data));
 
