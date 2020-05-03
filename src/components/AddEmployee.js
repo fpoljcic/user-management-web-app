@@ -230,7 +230,7 @@ class AddEmployee extends Component {
 
             console.log(data);
 
-
+            //Ovdje se šalje automatska notifikacija main serveru prilikom kreiranja novog uposlenika
             axios.request({
                 method: 'post',
                 url: ' https://main-server-si.herokuapp.com/api/auth/register',

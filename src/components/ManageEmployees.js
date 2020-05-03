@@ -181,7 +181,7 @@ class ManageEmployees extends React.Component {
     hireWorker(office) {
 
         console.log(this.state.currentRole);
-
+        //Zahtjev i za automatsko slanje notifikacije
         axios.request({
             method: 'post',
             url: 'https://main-server-si.herokuapp.com/api/business/employees',
@@ -203,7 +203,7 @@ class ManageEmployees extends React.Component {
     };
 
     fireWorker(office) {
-
+         //Zahtjev i za automatsko slanje notifikacije
         axios.request({
             method: 'delete',
             url: 'https://main-server-si.herokuapp.com/api/business/employees',

@@ -214,6 +214,7 @@ class UpdateEmployee extends Component {
             .catch(err => console.log(err));
     }
 
+    //Ovdje se šalje automatska notifikacija main serveru prilikom promjene podataka o uposleniku
     editEmployee(newMeetup) {
         let employee = this.props.match.params.id;
         axios.request({
