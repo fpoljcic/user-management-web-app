@@ -192,3 +192,12 @@ Merchant mora imati mogućnost pregleda svih aktivnosti korisnika sistema (log k
 * Implementirati mogućnost sortiranja redova u logu po svakom atributu
 * Uraditi push koda
 * Napraviti pull request
+
+# Feature
+Automatsko slanje notifikacije o zaposlenju i otpuštanju uposlenika
+## Item
+Merchant mora automatski slati notifikaciju Merchant Dashboard web aplikaciji kad zaposli novu osobu u poslovnici (info) ili da otkaz postojećem uposleniku (warning).
+### Task
+* Implementirati slanje notifikacije nakon zaposlenja ili otpuštanja uposlenika
+* Uraditi push koda
+* Napraviti pull request
