@@ -201,3 +201,12 @@ Merchant mora automatski slati notifikaciju Merchant Dashboard web aplikaciji ka
 * Implementirati slanje notifikacije nakon zaposlenja ili otpuštanja uposlenika
 * Uraditi push koda
 * Napraviti pull request
+
+# Feature
+Automatsko slanje notifikacije o dodavanju, uređivanju i brisanju uposlenika
+## Item
+Merchant mora automatski slati notifikaciju Admin web aplikaciji kada doda novog korisnika (info), ažurira (warning) ili obriše postojećeg (warning)
+### Task
+* Implementirati slanje notifikacije nakon dodavanja, uređivanja ili brisanja uposlenika
+* Uraditi push koda
+* Napraviti pull request
