@@ -1,17 +1,36 @@
-import React from 'react';
-import { Layout, Menu } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Layout, Menu, Dropdown } from 'antd';
 import { Link } from "react-router-dom";
 import { removeUserSession } from '../utilities/Common';
 import Img from 'react-image'
+import Notifications from './Notifications';
 
 const { Header } = Layout;
 
+
 function MyHeader(props) {
+
+   
+     var   showNoti = false;
+        
+    
+    function renderNotifications(){
+       
+            
+        return showNoti ? <Notifications />: null;
+    }
+    function toggleNoti(){
+        showNoti = !showNoti; 
+        renderNotifications();       
+    }
+
     // odjava korisnika
     const handleLogout = () => {
         removeUserSession();
         props.history.push('/');
     }
+
+
 
     return (
         <Header>
@@ -51,11 +70,19 @@ function MyHeader(props) {
                     <Link to="/dashboard/user_log" />
                 </Menu.Item>
 
+                
+
                 <Menu.Item key="7" style={{ float: "right" }} onClick={handleLogout}>
                     <Img src={require('../img/logout.png')} width='20px' height='20px' />
                     {" "}Log out
                 </Menu.Item>
+
+
+                <Menu.Item key = "8" style={{ float: "right" , zIndex: 1000}} >   
+                    <Notifications />
+                </Menu.Item>
             </Menu>
+            
         </Header>
     );
 }
