@@ -210,3 +210,13 @@ Merchant mora automatski slati notifikaciju Admin web aplikaciji kada doda novog
 * Implementirati slanje notifikacije nakon dodavanja, uređivanja ili brisanja uposlenika
 * Uraditi push koda
 * Napraviti pull request
+
+# Feature
+Primanje notifikacija
+## Item
+(M) Merchant mora imati mogućnost primanja notifikacija kada se neko prijavi na merchant dashboard web aplikaciju (info), kada neko izmjeni svoju šifru (warning) i kada se otvori nova poslovnica (info)
+### Task
+* Kreirati izgled komponente za primanje notifikacija
+* Implementirati primanje notifikacija koristeći sockjs-client i stompjs
+* Uraditi push koda
+* Napraviti pull request
