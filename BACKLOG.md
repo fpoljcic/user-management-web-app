@@ -84,14 +84,12 @@ Merchant mora imati mogućnost pregleda kojim kasama uposlenici mogu pristupiti.
 # Feature
 Dodavanje / uklanjanje privilegija uposlenicima
 ## Item
-Merchant mora imati mogućnost dodavanja / uklanjanja privilegija uposlenicima nad kasama.
+Merchant mora imati mogućnost dodavanja / uklanjanja privilegija postojećim uposlenicima sistema.
 ### Task
-* Kreirati izgled stranice za dodavanje / uklanjanje privilegija uposlenicima nad kasama
-* Implementirati dobavljanje potrebnih podataka za sve uposlenike sa servera
-* Implementirati funkcionalnost dodavanja privilegije određenom uposleniku nad određenom kasom slanjem zahtjeva prema serveru
-* Implementirati funkcionalnost uklanjanja privilegije određenom uposleniku nad određenom kasom slanjem zahtjeva prema serveru
-* Implementirati ispis poruke o (ne)uspješnom dodavanju privilegija
-* Implementirati ispis poruke o (ne)uspješnom uklanjanju privilegija
+* Dodati potrebne kontrole za ažuriranje privilegija uposlenicima
+* Dodati potrebnu validaciju nad kontrolama
+* Implementirati slanje zahtjeva prema serveru nakon odabira novih privilegija
+* Implementirati ispis poruke o (ne)uspješnom ažuriranju privilegija
 * Uraditi push koda
 * Napraviti pull request
 
@@ -155,12 +153,13 @@ Merchant mora imati mogućnost pregleda historije zaposlenja za svakog uposlenik
 * Napraviti pull request
 
 # Feature
-Pregled historije narudžbi
+Pregled zatvorenih računa
 ## Item
-Merchant mora imati mogućnost pregleda historije narudžbi za svakog korisnika sistema.
+Merchant mora imati mogućnost pregleda zatvorenih računa za svakog uposlenika na kasi.
 ### Task
-* Kreirati izgled stranice za pregled historije narudžbi željenog uposlenika
-* Implementirati dobavljanje potrebnih podataka za izabranog uposlenika sa servera
+* Kreirati izgled stranice za pregled historije zatvorenih računa željenog uposlenika
+* Implementirati dobavljanje potrebnih podataka za izabranog uposlenika (cashier-a) sa servera
+* Dodati preusmjerenje na ovu stranicu nakon odabira uposlenika
 * Uraditi push koda
 * Napraviti pull request
 
@@ -169,8 +168,7 @@ Slanje notifikacije o zaposlenja nove osobe
 ## Item
 Merchant mora imati mogućnost da pošalje notfikaciju Merchant Dashboard web aplikaciji u slučaju zaposlenja nove osobe u poslovnicu.
 ### Task
-* Kreirati dugme za uključenje / isključenje slanja notifikacije Merchant Dashboard web aplikaciji u slučaju zaposlenja nove osobe u poslovnicu
-* Implementirati slanje notifikacije prema servera nakon dodavanja uposlenika u slučaju da su notifikacije uključene
+* Implementirati slanje notifikacije prema serveru nakon dodavanja uposlenika
 * Uraditi push koda
 * Napraviti pull request
 
@@ -179,7 +177,36 @@ Slanje notifikacije o otpuštanju postojećeg uposlenika
 ## Item
 Merchant mora imati mogućnost da pošalje notifikaciju Merchant Dashboard web aplikaciji u slučaju davanja otkaza nekom uposleniku.
 ### Task
-* Kreirati dugme za uključenje / isključenje slanja notifikacije Merchant Dashboard web aplikaciji u slučaju otpuštanja postojećeg uposlenika
-* Implementirati slanje notifikacije prema servera nakon otpuštanja uposlenika u slučaju da su notifikacije uključene
+* Implementirati slanje notifikacije prema serveru nakon otpuštanja uposlenika
+* Uraditi push koda
+* Napraviti pull request
+
+# Feature
+Pregled svih aktivnosti korisnika sistema (log)
+## Item
+Merchant mora imati mogućnost pregleda svih aktivnosti korisnika sistema (log koji prikazuje vrstu akcije, datum, vrijeme i slične informacije) uz filtriranje i sortiranje.
+### Task
+* Kreirati izgled stranice za pregled svih aktivnosti korisnika sistema
+* Implementirati dobavljanje potrebnih podataka za sve korisnike sa servera
+* Implementirati mogućnost pretrage (filtriranja) redova u logu po svakom atributu
+* Implementirati mogućnost sortiranja redova u logu po svakom atributu
+* Uraditi push koda
+* Napraviti pull request
+
+# Feature
+Automatsko slanje notifikacije o zaposlenju i otpuštanju uposlenika
+## Item
+Merchant mora automatski slati notifikaciju Merchant Dashboard web aplikaciji kad zaposli novu osobu u poslovnici (info) ili da otkaz postojećem uposleniku (warning).
+### Task
+* Implementirati slanje notifikacije nakon zaposlenja ili otpuštanja uposlenika
+* Uraditi push koda
+* Napraviti pull request
+
+# Feature
+Automatsko slanje notifikacije o dodavanju, uređivanju i brisanju uposlenika
+## Item
+Merchant mora automatski slati notifikaciju Admin web aplikaciji kada doda novog korisnika (info), ažurira (warning) ili obriše postojećeg (warning)
+### Task
+* Implementirati slanje notifikacije nakon dodavanja, uređivanja ili brisanja uposlenika
 * Uraditi push koda
 * Napraviti pull request
