@@ -22,11 +22,9 @@
     "react-highlight-words": "^0.16.0",
     "react-icons": "^3.9.0",
     "react-image": "^2.4.0",
-    "react-notifications": "^1.6.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
     "semantic-ui-react": "^0.88.2",
-    "sockjs": "^0.3.20",
     "sockjs-client": "^1.4.0",
     "stompjs": "^2.3.3",
     "xlsx": "^0.15.6"
