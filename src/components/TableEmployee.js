@@ -142,6 +142,7 @@ class TableEmployee extends React.Component {
 
   deleteEmployee(userId, employeeObject) {
 
+    //Ovdje se šalje automatska notifikacija main serveru prilikom brisanja uposlenika
     axios.request({
       method: 'delete',
       url: `https://main-server-si.herokuapp.com/api/employees/${userId}`,
