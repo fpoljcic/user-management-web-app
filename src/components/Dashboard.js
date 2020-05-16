@@ -4,12 +4,12 @@ import { BrowserRouter as Router } from "react-router-dom";
 
 import PrivateRoute from '../utilities/PrivateRoute';
 
-import Home from './Home';
+import Home from './TableEmployees';
 import Cashier from './Cashier';
 import Manager from './Manager';
 import AddEmployee from './AddEmployee';
 import UpdateEmployee from './UpdateEmployee';
-import ManageEmployees from './ManageEmployees';
+import ManageEmployees from './TableEmployees';
 
 
 import MyHeader from './MyHeader';

@@ -1,9 +1,13 @@
 import React from "react";
 import ReactDOM from 'react-dom';
 import { render } from "@testing-library/react";
-import App from "./App";
+import Cashier from '../components/Cashier'
+import { mount, shallow, configure, describeWithDOM, spyLifecycle} from "enzyme";
+import Adapter from 'enzyme-adapter-react-16';
 
-describe("Test", () => {
+configure({adapter: new Adapter()});
+
+describe("Cashier tests", () => {
   beforeAll(() => {
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
@@ -20,12 +24,11 @@ describe("Test", () => {
     });
   });
 
-  test("initial test", () => {
+  test("Initial test", () => {
 
-    const div = document.createElement('div');
-    ReactDOM.render(<App />, div);
+    const wrapper = document.createElement("div");
+    ReactDOM.render(<Cashier/>, wrapper);
+    ReactDOM.unmountComponentAtNode(wrapper);
 
-    expect(true).toBeTruthy();
-    
   });
 });
