@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="6" failures="0" time="66.382">
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2020-05-17T20:01:09" time="42.485" tests="1">
+    <testcase classname=" Provjera editovanja uposlenika" name=" Provjera editovanja uposlenika" time="34.9">
+    </testcase>
+  </testsuite>
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2020-05-17T20:01:09" time="45.233" tests="1">
+    <testcase classname=" Provjera restarta sortiranja" name=" Provjera restarta sortiranja" time="37.842">
+    </testcase>
+  </testsuite>
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2020-05-17T20:01:09" time="50.439" tests="1">
+    <testcase classname=" Pregled historije uposlenika" name=" Pregled historije uposlenika" time="42.908">
+    </testcase>
+  </testsuite>
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2020-05-17T20:01:51" time="14.542" tests="1">
+    <testcase classname=" Provjera login i logout" name=" Provjera login i logout" time="11.737">
+    </testcase>
+  </testsuite>
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2020-05-17T20:01:54" time="16.258" tests="1">
+    <testcase classname=" Provjera sortiranja" name=" Provjera sortiranja" time="13.679">
+    </testcase>
+  </testsuite>
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2020-05-17T20:01:59" time="14.343" tests="1">
+    <testcase classname=" Provjera pretrage" name=" Provjera pretrage" time="11.647">
+    </testcase>
+  </testsuite>
+</testsuites>

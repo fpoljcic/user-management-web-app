@@ -35,6 +35,7 @@
     "build": "react-scripts build",
     "test": "set CI=true && react-scripts test",
     "test_linux": "CI=true react-scripts test",
+    "test_selenium": "selenium-side-runner C:\\Users\\Faris\\Desktop\\user-management-web-app\\SeleniumTests.side --output-directory=results --output-format=junit",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
