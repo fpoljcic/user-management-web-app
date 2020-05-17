@@ -460,7 +460,7 @@ class ManageEmployees extends React.Component {
         ];
 
         return (
-            <div>
+            <div class = "wrap">
                 <div className="site-layout-content">
                     <div style={{ width: '50%', margin: '0 auto' }}>
                         <h1 style={{ textAlign: "center" }}> Employees</h1>

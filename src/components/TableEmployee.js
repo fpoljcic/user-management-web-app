@@ -351,7 +351,7 @@ class TableEmployee extends React.Component {
       }
     ];
     return (
-      <div>
+      <div class = "wrap">
         <Table columns={columns} dataSource={this.state.employees} onChange={this.handleChange} />
         <div className="table-operations" style={{ marginTop: '-48px' }}>
           <Button onClick={this.clearAll}>Clear filters and sorters</Button>
