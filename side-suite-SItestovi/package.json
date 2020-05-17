@@ -1,0 +1,35 @@
+{
+  "name": "SItestovi",
+  "version": "0.0.0",
+  "jest": {
+    "extraGlobals": [],
+    "modulePaths": [
+      "C:\\Users\\Faris\\AppData\\Roaming\\npm\\node_modules\\selenium-side-runner\\node_modules",
+      "C:\\Users\\Faris\\AppData\\Roaming\\npm\\node_modules"
+    ],
+    "setupFilesAfterEnv": [
+      "C:\\Users\\Faris\\AppData\\Roaming\\npm\\node_modules\\selenium-side-runner\\node_modules\\jest-environment-selenium\\dist\\setup.js"
+    ],
+    "testEnvironment": "jest-environment-selenium",
+    "testEnvironmentOptions": {
+      "capabilities": {
+        "browserName": "chrome"
+      },
+      "params": {},
+      "runId": "6e433e285fa6e8983bdafaaf3773c961",
+      "path": "C:\\Users\\Faris\\AppData\\Roaming\\npm\\node_modules\\",
+      "timeout": 15000
+    },
+    "reporters": [
+      "default",
+      "jest-junit"
+    ]
+  },
+  "jest-junit": {
+    "outputDirectory": "..\\results",
+    "outputName": "SI testovi.xml"
+  },
+  "dependencies": {
+    "jest-junit": "^6.4.0"
+  }
+}
