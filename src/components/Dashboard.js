@@ -4,7 +4,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 
 import PrivateRoute from '../utilities/PrivateRoute';
 
-import Home from './TableEmployees';
+import Home from './Home';
 import Cashier from './Cashier';
 import Manager from './Manager';
 import AddEmployee from './AddEmployee';

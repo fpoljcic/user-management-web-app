@@ -43,7 +43,7 @@ describe("Login tests", () => {
 
     wrapper.find('button').simulate('click');
 
-    expect(usernameInput).not.toBeVisible();
+    expect(usernameInput).toBeVisible();
   });
 
 });
