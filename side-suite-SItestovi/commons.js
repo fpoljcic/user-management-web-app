@@ -204,7 +204,7 @@ tests["Pregled historije uposlenika"] = async (driver, vars, opts = {}) => {
   await driver.wait(until.elementLocated(By.id(`normal_login_password`)), configuration.timeout);
   await driver.findElement(By.id(`normal_login_password`)).then(element => {
     return element.clear().then(() => {
-      return element.sendKeys(`password`);
+      return element.sendKeys(`passwordWrong`);
     });
   });
   await driver.wait(until.elementLocated(By.css(`.ant-btn`)), configuration.timeout);

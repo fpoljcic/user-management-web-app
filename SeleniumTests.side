@@ -512,7 +512,7 @@
         ["xpath=//form[@id='normal_login']/div[2]/div/div/div/span/input", "xpath:idRelative"],
         ["xpath=//div[2]/div/div/div/span/input", "xpath:position"]
       ],
-      "value": "password"
+      "value": "passwordWrong"
     }, {
       "id": "3817970e-2e31-4194-97c7-04411efc0641",
       "comment": "",

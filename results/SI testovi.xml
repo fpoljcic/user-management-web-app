@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="5" failures="0" time="29.975">
-  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2020-05-17T23:33:47" time="18.285" tests="1">
-    <testcase classname=" Pregled historije uposlenika" name=" Pregled historije uposlenika" time="11.264">
+<testsuites name="jest tests" tests="5" failures="1" time="32.797">
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2020-05-18T10:38:28" time="17.051" tests="1">
+    <testcase classname=" Provjera dugme za notifikacije" name=" Provjera dugme za notifikacije" time="10.914">
     </testcase>
   </testsuite>
-  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2020-05-17T23:33:47" time="17.063" tests="1">
-    <testcase classname=" Provjera dugme za notifikacije" name=" Provjera dugme za notifikacije" time="9.776">
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2020-05-18T10:38:28" time="19.488" tests="1">
+    <testcase classname=" Provjera pretrage" name=" Provjera pretrage" time="13.349">
     </testcase>
   </testsuite>
-  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2020-05-17T23:33:47" time="19.827" tests="1">
-    <testcase classname=" Provjera pretrage" name=" Provjera pretrage" time="12.539">
+  <testsuite name="undefined" errors="0" failures="1" skipped="0" timestamp="2020-05-18T10:38:28" time="28.234" tests="1">
+    <testcase classname=" Pregled historije uposlenika" name=" Pregled historije uposlenika" time="22.281">
+      <failure>TimeoutError: Waiting for element to be located By(css selector, .ant-table-row:nth-child(2) &gt; .ant-table-cell:nth-child(11) &gt; a)
+Wait timed out after 15031ms
+    at C:\Users\Faris\AppData\Roaming\npm\node_modules\selenium-side-runner\node_modules\selenium-webdriver\lib\webdriver.js:841:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5)</failure>
     </testcase>
   </testsuite>
-  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2020-05-17T23:34:07" time="9.09" tests="1">
-    <testcase classname=" Provjera login i logout" name=" Provjera login i logout" time="6.562">
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2020-05-18T10:38:45" time="12.657" tests="1">
+    <testcase classname=" Provjera editovanja uposlenika" name=" Provjera editovanja uposlenika" time="10.211">
     </testcase>
   </testsuite>
-  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2020-05-17T23:34:06" time="10.391" tests="1">
-    <testcase classname=" Provjera editovanja uposlenika" name=" Provjera editovanja uposlenika" time="7.744">
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2020-05-18T10:38:47" time="12.09" tests="1">
+    <testcase classname=" Provjera login i logout" name=" Provjera login i logout" time="9.842">
     </testcase>
   </testsuite>
 </testsuites>
