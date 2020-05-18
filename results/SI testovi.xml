@@ -1,27 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="6" failures="0" time="66.382">
-  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2020-05-17T20:01:09" time="42.485" tests="1">
-    <testcase classname=" Provjera editovanja uposlenika" name=" Provjera editovanja uposlenika" time="34.9">
+<testsuites name="jest tests" tests="5" failures="0" time="29.975">
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2020-05-17T23:33:47" time="18.285" tests="1">
+    <testcase classname=" Pregled historije uposlenika" name=" Pregled historije uposlenika" time="11.264">
     </testcase>
   </testsuite>
-  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2020-05-17T20:01:09" time="45.233" tests="1">
-    <testcase classname=" Provjera restarta sortiranja" name=" Provjera restarta sortiranja" time="37.842">
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2020-05-17T23:33:47" time="17.063" tests="1">
+    <testcase classname=" Provjera dugme za notifikacije" name=" Provjera dugme za notifikacije" time="9.776">
     </testcase>
   </testsuite>
-  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2020-05-17T20:01:09" time="50.439" tests="1">
-    <testcase classname=" Pregled historije uposlenika" name=" Pregled historije uposlenika" time="42.908">
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2020-05-17T23:33:47" time="19.827" tests="1">
+    <testcase classname=" Provjera pretrage" name=" Provjera pretrage" time="12.539">
     </testcase>
   </testsuite>
-  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2020-05-17T20:01:51" time="14.542" tests="1">
-    <testcase classname=" Provjera login i logout" name=" Provjera login i logout" time="11.737">
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2020-05-17T23:34:07" time="9.09" tests="1">
+    <testcase classname=" Provjera login i logout" name=" Provjera login i logout" time="6.562">
     </testcase>
   </testsuite>
-  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2020-05-17T20:01:54" time="16.258" tests="1">
-    <testcase classname=" Provjera sortiranja" name=" Provjera sortiranja" time="13.679">
-    </testcase>
-  </testsuite>
-  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2020-05-17T20:01:59" time="14.343" tests="1">
-    <testcase classname=" Provjera pretrage" name=" Provjera pretrage" time="11.647">
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2020-05-17T23:34:06" time="10.391" tests="1">
+    <testcase classname=" Provjera editovanja uposlenika" name=" Provjera editovanja uposlenika" time="7.744">
     </testcase>
   </testsuite>
 </testsuites>
