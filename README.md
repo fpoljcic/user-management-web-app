@@ -1,5 +1,6 @@
 User Management Web App
 ============
+<img align="right" width="100" height="100" src="https://raw.githubusercontent.com/fpoljcic/user-management-web-app/master/public/logo.png">
 
 This repository is used for development of a web app for a group student project. It's just a module that is part of a bigger information system for selling and charging products and services.
 
