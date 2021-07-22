@@ -28,7 +28,7 @@
     "semantic-ui-react": "^0.88.2",
     "sockjs-client": "^1.4.0",
     "stompjs": "^2.3.3",
-    "xlsx": "^0.15.6"
+    "xlsx": "^0.17.0"
   },
   "scripts": {
     "start": "react-scripts start",
